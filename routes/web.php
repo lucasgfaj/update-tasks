@@ -2,13 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
 
-Route::get('/', [UserController::class, 'index']);
+Route::get('/', [AuthController::class, 'index']);
 
-Route::get('/register', [UserController::class, 'showRegisterForm'])->name('register');
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [UserController::class, 'register']);
 
-Route::get('/login', [UserController::class, 'showLoginForm'])->name('login');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [UserController::class, 'login']);
 
-Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

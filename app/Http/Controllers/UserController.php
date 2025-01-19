@@ -10,14 +10,6 @@ use Carbon\Carbon;
 
 class UserController extends Controller
 {
-    /**
-     * Exibe a página de login
-     */
-    public function showLoginForm()
-    {
-        return view('auth.login');
-    }
-
     // Processa o registro
     public function register(Request $request)
     {
@@ -76,26 +68,8 @@ class UserController extends Controller
             'email' => 'O email ou a senha fornecidos não são válidos.',
         ]);
     }
-
-    // Processa o logout
-    public function logout(Request $request)
-    {
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('/');
-    }
-
-    // Exibe a página de registro
-    public function showRegisterForm()
-    {
-        return view('auth.register');
-    }
-
-    /**
-     * Outros métodos não utilizados
+     /**
+    * Outros métodos não utilizados
      */
     public function create() {}
     public function store(Request $request) {}
