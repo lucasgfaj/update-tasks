@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <form action="{{ route('register') }}" method="POST" class="bg-white p-6 rounded shadow-md w-full max-w-sm">
+    <form action="{{ route('auth.register') }}" method="POST" class="bg-white p-6 rounded shadow-md w-full max-w-sm">
         @csrf
         <h1 class="text-xl font-bold mb-4">Register</h1>
 
@@ -45,7 +45,7 @@
         <!-- Link para login -->
         <p class="text-center text-sm">
             Já tem uma conta?
-            <a href="{{ route('login') }}" class="text-blue-500 hover:underline">Login</a>
+            <a href="{{ route('auth.login') }}" class="text-blue-500 hover:underline">Login</a>
         </p>
     </form>
 </body>
