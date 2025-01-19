@@ -37,9 +37,4 @@ class AuthController extends Controller
 
         return redirect('/');
     }
-
-    public function dashboard(){
-        return view ('dashboard.index');
-    }
-
 }

@@ -36,7 +36,7 @@ class UserController extends Controller
         // Chama o método de criação no modelo User
         User::create($data);
 
-        return redirect()->route('login')->with('success', 'Registro realizado com sucesso!');
+        return redirect()->route('auth.login')->with('success', 'Registro realizado com sucesso!');
     }
     // Processa o login
     public function login(Request $request)
@@ -63,14 +63,51 @@ class UserController extends Controller
         ]);
     }
 
-    // Processa o logout
-    public function logout(Request $request)
+    // Exibe o formulário de edição do usuário
+    public function edit($id)
     {
-        Auth::logout();
+        $user = User::getUserById($id); // Busca o usuário pelo ID
+        if ($user) {
+            return view('user.edit', compact('user')); // Passa o usuário para a view
+        }
+        return redirect()->route('dashboard')->with('error', 'Usuário não encontrado!');
+    }
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+    // Atualiza os dados do usuário
+    public function update(Request $request, $id)
+    {
+        // Valida os dados
+        $request->validate([
+            'name' => 'required|string|max:400',
+            'email' => 'required|string|email|max:400|unique:users,email,' . $id,
+            'password' => 'nullable|string|min:6|confirmed',
+        ]);
 
-        return redirect('/');
+        // Prepara os dados para atualização
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'role' => 'user', // ou algum valor predefinido
+            'level' => 1, // ou algum valor predefinido
+        ];
+
+        // Se a senha for fornecida, inclui no array
+        if ($request->filled('password')) {
+            $data['password'] = $request->password;
+        }
+
+        // Atualiza os dados do usuário
+        User::updateUser($id, $data);
+
+        return redirect()->route('user.edit', $id)->with('success', 'Dados atualizados com sucesso!');
+    }
+
+    public function dashboard()
+    {
+        // Buscar todos os usuários
+        $users = User::getAllUsers();
+
+        // Passar a variável $users para a view
+        return view('dashboard.index', compact('users'));
     }
 }
