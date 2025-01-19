@@ -1,48 +1,35 @@
 <?php
-
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    protected $table = 'users';  // Continuamos utilizando a tabela 'users'
+
+    // Atributos preenchíveis
+
+    // Define qual é a chave primária
+    protected $primaryKey = 'id_user';
+
     protected $fillable = [
         'name',
         'email',
         'password',
+        'role',
+        'level',
+        'created_at',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
+    // Atributos que não são visíveis no array ou JSON
     protected $hidden = [
-        'password',
+        'password', // Garantir que a senha nunca seja exposta
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    // Aqui podemos manter se precisar usar esse modelo, mas sem métodos Eloquent
+    // O acesso direto ao banco é feito via SQL
 }

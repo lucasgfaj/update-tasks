@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class TeamTasksController extends Controller
+class TeamProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
