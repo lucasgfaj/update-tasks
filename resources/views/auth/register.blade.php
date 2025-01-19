@@ -11,9 +11,13 @@
         @csrf
         <h1 class="text-xl font-bold mb-4">Register</h1>
 
-        <!-- Mensagem de erro -->
-        @if(session('error'))
-            <div class="mb-4 text-red-500">{{ session('error') }}</div>
+        <!-- Mensagem de erro geral -->
+        @if ($errors->any())
+            <div class="mb-4 text-red-500">
+                @foreach ($errors->all() as $error)
+                    <div>{{ $error }}</div>
+                @endforeach
+            </div>
         @endif
 
         <div class="mb-4">
