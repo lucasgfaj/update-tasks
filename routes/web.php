@@ -28,8 +28,10 @@ Route::middleware('auth')->group(function() {
 
     // Rota para editar usuário
     Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+    
+    // Rota para atualizar os dados do usuário
     Route::put('/user/update/{id}', [UserController::class, 'update'])->name('user.update');
-
+    
     // Rota para deletar usuário
     Route::delete('/user/delete/{id}', [UserController::class, 'deleteUser'])->name('user.delete');
 });

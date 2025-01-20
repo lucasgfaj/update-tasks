@@ -68,39 +68,39 @@ class UserController extends Controller
     {
         $user = User::getUserById($id); // Busca o usuário pelo ID
         if ($user) {
-            return view('user.edit', compact('user')); // Passa o usuário para a view
+            return view('user.edit', ['user' => $user[0]]); // Passa o usuário para a view
         }
         return redirect()->route('dashboard')->with('error', 'Usuário não encontrado!');
     }
 
     // Atualiza os dados do usuário
     public function update(Request $request, $id)
-    {
-        // Valida os dados
-        $request->validate([
-            'name' => 'required|string|max:400',
-            'email' => 'required|string|email|max:400|unique:users,email,' . $id,
-            'password' => 'nullable|string|min:6|confirmed',
-        ]);
+{
+    // Valida os dados
+    $request->validate([
+        'name' => 'required|string|max:400',
+        'email' => 'required|string|email|max:400|unique:users,email,' . $id_user, // Corrigido para 'email,' . $id_user
+        'password' => 'nullable|string|min:6|confirmed',
+    ]);
 
-        // Prepara os dados para atualização
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => 'user', // ou algum valor predefinido
-            'level' => 1, // ou algum valor predefinido
-        ];
+    // Prepara os dados para atualização
+    $data = [
+        'name' => $request->name,
+        'email' => $request->email,
+        'role' => 'user', // ou algum valor predefinido
+        'level' => 1, // ou algum valor predefinido
+    ];
 
-        // Se a senha for fornecida, inclui no array
-        if ($request->filled('password')) {
-            $data['password'] = $request->password;
-        }
-
-        // Atualiza os dados do usuário
-        User::updateUser($id, $data);
-
-        return redirect()->route('user.edit', $id)->with('success', 'Dados atualizados com sucesso!');
+    // Se a senha for fornecida, inclui no array
+    if ($request->filled('password')) {
+        $data['password'] = bcrypt($request->password);
     }
+
+    // Atualiza os dados do usuário
+    User::updateUser($id, $data);
+
+    return redirect()->route('user.edit', $id)->with('success', 'Dados atualizados com sucesso!');
+}
 
     public function dashboard()
     {

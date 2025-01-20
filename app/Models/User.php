@@ -66,14 +66,9 @@ class User extends Authenticatable
 
     // Função para encontrar um usuário por ID com SQL direto
     public static function getUserById($id)
-    {
-        // Verifique se $id é realmente um número
-        if (!is_numeric($id)) {
-            throw new \InvalidArgumentException("O ID fornecido não é válido.");
-        }
-        // Busca um usuário pelo ID
-        return DB::select('SELECT * FROM users WHERE id_user = ?', [$id]);
-    }
+{
+    return DB::select('SELECT * FROM users WHERE id_user = ?', [$id]);
+}
 
     // Função para atualizar os dados de um usuário com SQL direto
     public static function updateUser($id, $data)
