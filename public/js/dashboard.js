@@ -34,3 +34,4 @@ const mobileMenu = document.getElementById('mobile-menu');
 // Configurando os menus
 setupUserMenu(userMenuButton, userMenu);
 setupMobileMenu(mobileButton, mobileMenu);
+

@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('content')
-    <section>
+@section('content'
+<section class="mt-10">
     <div class="container mx-auto">
-      <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">Tasks</h1>
+      <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">Comments Logs</h1>
       <div>
       <div class="mb-4 flex justify-between">
             <input 
@@ -25,44 +25,24 @@
           <!-- Cabeçalho -->
           <thead>
             <tr class="bg-gradient-to-r from-blue-400 to-purple-400 text-white text-sm uppercase tracking-wide">
+              <th class="px-4 py-3 text-left">ID</th>
+              <th class="px-4 py-3 text-left">Tipo</th>
               <th class="px-4 py-3 text-left">Tarefa</th>
-              <th class="px-4 py-3 text-left">Descrição</th>
-              <th class="px-4 py-3 text-left">Prioridade</th>
-              <th class="px-4 py-3 text-left">Status</th>
+              <th class="px-4 py-3 text-left">Usuário</th>
               <th class="px-4 py-3 text-left">Data de Criação</th>
-              <th class="px-4 py-3 text-left">Prazo</th>
               <th class="px-4 py-3 text-left">Opções</th>
             </tr>
           </thead>
           <!-- Corpo -->
           <tbody>
             <tr class="bg-gray-50 hover:bg-blue-50 transition">
+              <td class="px-4 py-3 border-t border-gray-200">1</td>
+              <td class="px-4 py-3 border-t border-gray-200">
+                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">Andamento</span>
+              </td>
               <td class="px-4 py-3 border-t border-gray-200">Tarefa - 1</td>
-              <td class="px-4 py-3 border-t border-gray-200">Ajustar Dados - SQL</td>
-              <td class="px-4 py-3 border-t border-gray-200">
-                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded">Médio</span>
-              </td>
-              <td class="px-4 py-3 border-t border-gray-200">
-                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">Em Andamento</span>
-              </td>
-              <td class="px-4 py-3 border-t border-gray-200">18/11/2024</td>
-              <td class="px-4 py-3 border-t border-gray-200">18/02/2025</td>
-              <td class="px-4 py-3 border-t border-gray-200 flex gap-2">
-                <button class="text-sm bg-blue-500 text-white px-3 py-1 rounded shadow hover:bg-blue-600">Editar</button>
-                <button class="text-sm bg-red-500 text-white px-3 py-1 rounded shadow hover:bg-red-600">Excluir</button>
-              </td>
-            </tr>
-            <tr class="bg-gray-50 hover:bg-blue-50 transition">
-              <td class="px-4 py-3 border-t border-gray-200">Tarefa - 2</td>
-              <td class="px-4 py-3 border-t border-gray-200">Criar Relatório Final</td>
-              <td class="px-4 py-3 border-t border-gray-200">
-                <span class="bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded">Alta</span>
-              </td>
-              <td class="px-4 py-3 border-t border-gray-200">
-                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">Concluído</span>
-              </td>
-              <td class="px-4 py-3 border-t border-gray-200">15/11/2024</td>
-              <td class="px-4 py-3 border-t border-gray-200">20/11/2024</td>
+              <td class="px-4 py-3 border-t border-gray-200">Lucas</td>
+              <td class="px-4 py-3 border-t border-gray-200">21/12/2024</td>
               <td class="px-4 py-3 border-t border-gray-200 flex gap-2">
                 <button class="text-sm bg-blue-500 text-white px-3 py-1 rounded shadow hover:bg-blue-600">Editar</button>
                 <button class="text-sm bg-red-500 text-white px-3 py-1 rounded shadow hover:bg-red-600">Excluir</button>
@@ -114,4 +94,4 @@
 
     </div>
   </section>
-@endsection
+  @endsection
