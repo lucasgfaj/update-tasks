@@ -28,9 +28,10 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password), // Criptografa a senha
-            'role' => 'user',
-            'level' => 1,
+            'role' => '',
+            'experience' => 'Junior',
             'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ];
 
         // Chama o método de criação no modelo User
@@ -74,12 +75,12 @@ class UserController extends Controller
     }
 
     // Atualiza os dados do usuário
-    public function update(Request $request, $id)
+    public function update(Request $request, $id_user)
 {
     // Valida os dados
     $request->validate([
         'name' => 'required|string|max:400',
-        'email' => 'required|string|email|max:400|unique:users,email,' . $id_user, // Corrigido para 'email,' . $id_user
+        'email' => 'required|string|email|max:400|unique:users,email,' . $id_user . ',id_user', // Corrigido para 'email,' . $id_user
         'password' => 'nullable|string|min:6|confirmed',
     ]);
 
@@ -87,8 +88,8 @@ class UserController extends Controller
     $data = [
         'name' => $request->name,
         'email' => $request->email,
-        'role' => 'user', // ou algum valor predefinido
-        'level' => 1, // ou algum valor predefinido
+        'role' => '', // ou algum valor predefinido
+        'experience' => 'Junior', // ou algum valor predefinido
     ];
 
     // Se a senha for fornecida, inclui no array
@@ -97,9 +98,9 @@ class UserController extends Controller
     }
 
     // Atualiza os dados do usuário
-    User::updateUser($id, $data);
+    User::updateUser($id_user, $data);
 
-    return redirect()->route('user.edit', $id)->with('success', 'Dados atualizados com sucesso!');
+    return redirect()->route('user.edit', $id_user)->with('success', 'Dados atualizados com sucesso!');
 }
 
     public function dashboard()

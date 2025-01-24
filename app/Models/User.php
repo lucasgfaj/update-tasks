@@ -21,8 +21,9 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'level',
+        'experience',
         'created_at',
+        'updated_at',
     ];
 
     public $timestamps = false;
@@ -40,14 +41,14 @@ class User extends Authenticatable
     {
         // Insere um novo usuário utilizando SQL direto
         return DB::insert(
-            'INSERT INTO users (name, email, password, role, level, created_at)
+            'INSERT INTO users (name, email, password, role, experience, created_at)
              VALUES (?, ?, ?, ?, ?, ?)',
             [
                 $data['name'],
                 $data['email'],
                 bcrypt($data['password']), // Garantir a senha criptografada
                 $data['role'],
-                $data['level'],
+                $data['experience'],
                 now()  // Data e hora atual
             ]
         );
@@ -73,20 +74,25 @@ class User extends Authenticatable
     // Função para atualizar os dados de um usuário com SQL direto
     public static function updateUser($id, $data)
     {
-        // Atualiza os dados de um usuário utilizando SQL direto
-        return DB::update(
-            'UPDATE users SET name = ?, email = ?, password = ?, role = ?, level = ?, updated_at = ?
-             WHERE id_user = ?',
-            [
-                $data['name'],
-                $data['email'],
-                isset($data['password']) ? bcrypt($data['password']) : null, // Se não for passada uma nova senha, ela não será alterada
-                $data['role'],
-                $data['level'],
-                now(), // Data e hora da última atualização
-                $id
-            ]
-        );
+        $sql = 'UPDATE users SET name = ?, email = ?, role = ?, experience = ?, updated_at = ?';
+
+        $bindings = [
+            $data['name'],
+            $data['email'],
+            $data['role'],
+            $data['experience'],
+            now(), // Data e hora da última atualização
+        ];
+
+        if (isset($data['password']) && !empty($data['password'])) {
+            $sql .= ', password = ?';
+            $bindings[] = bcrypt($data['password']);
+        }
+
+        $sql .= ' WHERE id_user = ?';
+        $bindings[] = $id;
+
+        return DB::update($sql, $bindings);
     }
 
     // Função para excluir um usuário com SQL direto

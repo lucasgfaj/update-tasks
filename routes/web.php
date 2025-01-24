@@ -24,16 +24,16 @@ Route::prefix('auth')->name('auth.')->group(function() {
 });
 
 // Rotas protegidas para usuários autenticados
-Route::middleware('auth')->group(function() {
+Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
 
     // Rota para editar usuário
     Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
-    
+
     // Rota para atualizar os dados do usuário
     Route::put('/user/update/{id}', [UserController::class, 'update'])->name('user.update');
-    
+
     // Rota para deletar usuário
     Route::delete('/user/delete/{id}', [UserController::class, 'deleteUser'])->name('user.delete');
 
@@ -43,4 +43,11 @@ Route::middleware('auth')->group(function() {
     // Comments
     Route::get('/comments', [CommentLogController::class, 'comment'])->name('comment');
 
+    // Admin (protegido para admin apenas)
+    Route::get('/users', function () {
+        if (!auth()->check() || auth()->user()->role !== 'admin') {
+            abort(403, 'Acesso negado.');
+        }
+        return view('users.index');
+    })->name('users.index');
 });

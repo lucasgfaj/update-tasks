@@ -9,17 +9,17 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
 
-  <!-- CSS Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- CSS Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-<!-- CSS DataTables -->
-<link href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.css" rel="stylesheet">
+    <!-- CSS DataTables -->
+    <link href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.css" rel="stylesheet">
 
 </head>
 
 <body class="bg-gradient-to-r from-blue-50 to-purple-50">
     <header>
-        <nav class="bg-gray-800">
+        <nav class="bg-gradient-to-r from-blue-500 to-purple-600">
             <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                 <div class="relative flex h-16 items-center justify-between">
                     <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -41,19 +41,27 @@
                         </div>
                         <div class="hidden sm:ml-6 sm:block">
                             <div class="flex space-x-4">
-                            <form action="{{ route('dashboard') }}" method="GET">
+                                <form action="{{ route('dashboard') }}" method="GET">
                                     @csrf
-                            <button class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700 hover:text-white" aria-current="page">Dashboard</button>
-                            </form>
-                            <form action="{{ route('team') }}" method="GET">
+                                    <button class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700 hover:text-white" aria-current="page">Dashboard</button>
+                                </form>
+                                <form action="{{ route('team') }}" method="GET">
                                     @csrf
-                            <button href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</button>
-                            </form>
-                            <form action="{{ route('comment') }}" method="GET">
+                                    <button href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</button>
+                                </form>
+                                <form action="{{ route('comment') }}" method="GET">
                                     @csrf
-                            <button href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Comments</button>
-                            </form>
-                               <!-- <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Projects</a>
+                                    <button href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Comments</button>
+                                </form>
+                                @if(auth()->user()->role === 'admin')
+                                <form action="" method="GET">
+                                    @csrf
+                                    <button href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                                        Users
+                                    </button>
+                                </form>
+                                @endif
+                                <!-- <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Projects</a>
                                 <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Calendar</a> -->
                             </div>
                         </div>
@@ -77,17 +85,17 @@
                                 </button>
                             </div>
                             <div class="hidden" id="user-menu">
-                            <!-- Dropdown menu -->
-                            <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none">
-                                <form action="{{ route('user.edit', Auth::user()->id_user) }}" method="GET">
-                                    @csrf
-                                <button class="bloack px-4 py-2 text-sm text-gray-700">Meu Perfil</button>
-                                </form>
-                                <form action="{{ route('auth.logout') }}" method="POST">
-                                    @csrf
-                                <button class="block px-4 py-2 text-sm text-gray-700">Log-Out</button>
-                                </form>
-                            </div>
+                                <!-- Dropdown menu -->
+                                <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none">
+                                    <form action="{{ route('user.edit', Auth::user()->id_user) }}" method="GET">
+                                        @csrf
+                                        <button class="bloack px-4 py-2 text-sm text-gray-700">Meu Perfil</button>
+                                    </form>
+                                    <form action="{{ route('auth.logout') }}" method="POST">
+                                        @csrf
+                                        <button class="block px-4 py-2 text-sm text-gray-700">Log-Out</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -99,85 +107,55 @@
                 <div class="space-y-1 px-2 pb-3 pt-2">
                     <form action="{{ route('dashboard') }}" method="GET">
                         @csrf
-                    <button class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard</button>
+                        <button class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard</button>
                     </form>
-                    <form action="#" method="GET">
-                    @csrf
-                    <button class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</button>
+                    <form action="{{ route('team') }}" method="GET">
+                        @csrf
+                        <button class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Team</button>
                     </form>
-                    <form action="#" method="GET">
-                    @csrf
-                    <button class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Comments</button>
+                    <form action="#" method="{{ route('comment') }}">
+                        @csrf
+                        <button class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Comments</button>
                     </form>
-                    <!-- <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Projects</a>
-                    <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Calendar</a> -->
+                    @if(auth()->user()->role === 'admin')
+                    <form action="#" method="">
+                        @csrf
+                        <button class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Users</button>
+                    </form>
+                    @endif
+
                 </div>
             </div>
         </nav>
 
     </header>
 
-     <!-- Conteúdo principal -->
-     <main class="container mx-auto py-6 min-h-screen p-6">
+    <!-- Conteúdo principal -->
+    <main class="container mx-auto py-6 min-h-screen p-6">
         @yield('content')
+    </main>
 
-
-
-
-        </main>
-
-        <footer class="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-5">
-    <div class="container mx-auto px-4 grid md:grid-cols-4 gap-8">
-        <div>
-            <h3 class="font-bold text-xl mb-4">Sobre Nós</h3>
-            <p class="text-sm text-gray-200">Plataforma de gerenciamento de tarefas moderna e eficiente.</p>
-        </div>
-        <div>
-            <h3 class="font-bold text-xl mb-4">Links Rápidos</h3>
-            <ul class="space-y-2">
-                <li><a href="#" class="hover:text-blue-200">Início</a></li>
-                <li><a href="#" class="hover:text-blue-200">Tarefas</a></li>
-                <li><a href="#" class="hover:text-blue-200">Relatórios</a></li>
-            </ul>
-        </div>
-        <div>
-            <h3 class="font-bold text-xl mb-4">Contato</h3>
-            <p class="text-sm">
-                Email: contato@taskmanager.com<br>
-                Telefone: (11) 9999-9999
-            </p>
-        </div>
-        <div>
-            <h3 class="font-bold text-xl mb-4">Siga-nos</h3>
-            <div class="flex space-x-4">
-                <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-linkedin"></i></a>
-            </div>
-        </div>
-    </div>
-    <div class="border-t border-blue-400 mt-8 py-4 text-center">
-        <p class="text-sm">&copy; 2025 Update Task. Todos os direitos reservados.</p>
-    </div>
-</footer>
+    <footer class="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 text-center">
+            <p class="text-sm">&copy; {{ date('Y') }} - Update Task. Todos os direitos reservados.</p>
+    </footer>
     <script src="{{ asset('js/task-datatable.js') }}"></script>
     <script src="{{ asset('js/dashboard.js') }}"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-  
-  <!-- JS Bootstrap -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-  <!-- JS DataTables -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-  <script src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.js"></script>
+    <!-- JS Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- JS DataTables -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.js"></script>
 </body>
-  
 
 
-      <!-- jQuery -->
+
+<!-- jQuery -->
 
 
 </html>
