@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <section>
+    <section class="mt-10">
     <div class="container mx-auto">
-      <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">Tasks</h1>
+      <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">Tarefas</h1>
       <div>
       <div class="mb-4 flex justify-between">
             <input 
@@ -25,8 +25,11 @@
           <!-- Cabeçalho -->
           <thead>
             <tr class="bg-gradient-to-r from-blue-400 to-purple-400 text-white text-sm uppercase tracking-wide">
+              <th class="px-4 py-3 text-left">ID</th>
               <th class="px-4 py-3 text-left">Tarefa</th>
-              <th class="px-4 py-3 text-left">Descrição</th>
+              <th class="px-4 py-3 text-left">Time de Projeto</th>
+              <!-- <th class="px-4 py-3 text-left">Usuários Envolvidos</th> -->
+              <!-- <th class="px-4 py-3 text-left">Descrição</th> -->
               <th class="px-4 py-3 text-left">Prioridade</th>
               <th class="px-4 py-3 text-left">Status</th>
               <th class="px-4 py-3 text-left">Data de Criação</th>
@@ -37,8 +40,11 @@
           <!-- Corpo -->
           <tbody>
             <tr class="bg-gray-50 hover:bg-blue-50 transition">
+            <td class="px-4 py-3 border-t border-gray-200">1</td>
               <td class="px-4 py-3 border-t border-gray-200">Tarefa - 1</td>
-              <td class="px-4 py-3 border-t border-gray-200">Ajustar Dados - SQL</td>
+              <td class="px-4 py-3 border-t border-gray-200">DevOps</td>
+              <!-- <td class="px-4 py-3 border-t border-gray-200">Lucas Fajardo</td> -->
+              <!-- <td class="px-4 py-3 border-t border-gray-200">Ajustar Dados - SQL</td> -->
               <td class="px-4 py-3 border-t border-gray-200">
                 <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded">Médio</span>
               </td>
@@ -52,31 +58,15 @@
                 <button class="text-sm bg-red-500 text-white px-3 py-1 rounded shadow hover:bg-red-600">Excluir</button>
               </td>
             </tr>
-            <tr class="bg-gray-50 hover:bg-blue-50 transition">
-              <td class="px-4 py-3 border-t border-gray-200">Tarefa - 2</td>
-              <td class="px-4 py-3 border-t border-gray-200">Criar Relatório Final</td>
-              <td class="px-4 py-3 border-t border-gray-200">
-                <span class="bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded">Alta</span>
-              </td>
-              <td class="px-4 py-3 border-t border-gray-200">
-                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">Concluído</span>
-              </td>
-              <td class="px-4 py-3 border-t border-gray-200">15/11/2024</td>
-              <td class="px-4 py-3 border-t border-gray-200">20/11/2024</td>
-              <td class="px-4 py-3 border-t border-gray-200 flex gap-2">
-                <button class="text-sm bg-blue-500 text-white px-3 py-1 rounded shadow hover:bg-blue-600">Editar</button>
-                <button class="text-sm bg-red-500 text-white px-3 py-1 rounded shadow hover:bg-red-600">Excluir</button>
-              </td>
-            </tr>
           </tbody>
         </table>
       </div>
-      <div class="mt-2 flex flex-col items-center">
+      <div class="mt-6 flex flex-col items-center">
   <!-- Help text -->
   <span class="text-sm text-gray-700 dark:text-gray-400">
       Showing <span class="font-semibold text-gray-900 dark:text-white">1</span> to <span class="font-semibold text-gray-900 dark:text-white">10</span> of <span class="font-semibold text-gray-900 dark:text-white">100</span> Entries
   </span>
-  <nav class="mt-2" aria-label="Page navigation example">
+  <nav class="mt-4" aria-label="Page navigation example">
   <ul class="flex items-center -space-x-px h-8 text-sm">
     <li>
       <a href="#" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">

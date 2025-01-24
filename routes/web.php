@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TeamProjectController;
+use App\Http\Controllers\CommentLogController;
 use App\Http\Controllers\AuthController;
 
 // Página inicial - Login
@@ -34,4 +36,11 @@ Route::middleware('auth')->group(function() {
     
     // Rota para deletar usuário
     Route::delete('/user/delete/{id}', [UserController::class, 'deleteUser'])->name('user.delete');
+
+    // Team
+    Route::get('/team', [TeamProjectController::class, 'team'])->name('team');
+
+    // Comments
+    Route::get('/comments', [CommentLogController::class, 'comment'])->name('comment');
+
 });

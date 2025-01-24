@@ -45,11 +45,11 @@
                                     @csrf
                             <button class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700 hover:text-white" aria-current="page">Dashboard</button>
                             </form>
-                            <form action="" method="GET">
+                            <form action="{{ route('team') }}" method="GET">
                                     @csrf
                             <button href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</button>
                             </form>
-                            <form action="" method="GET">
+                            <form action="{{ route('comment') }}" method="GET">
                                     @csrf
                             <button href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Comments</button>
                             </form>

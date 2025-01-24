@@ -8,12 +8,13 @@ use App\Models\TeamProject;
 class TeamProjectController extends Controller
 {
     /**
-     * Exibe todos os projetos.
+     * Rota Team
      */
-    public function index()
+    public function team()
     {
-        $projects = TeamProject::all(); // Obtém todos os projetos
-        return view('projects.index', ['projects' => $projects]); // Retorna para a view
+        // $projects = TeamProject::all(); // Obtém todos os projetos
+        // return view('team.index', ['projects' => $projects]); // Retorna para a view
+        return view('team.index');
     }
 
     /**

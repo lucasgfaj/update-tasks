@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('content'
+@section('content')
 <section class="mt-10">
     <div class="container mx-auto">
-      <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">Comments Logs</h1>
+      <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">Comentários</h1>
       <div>
       <div class="mb-4 flex justify-between">
             <input 
@@ -16,7 +16,7 @@
                 id="addTaskBtn" 
                 class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
             >
-                Adicionar Tarefa
+                Adicionar Comentário
             </button>
         </div>
       </div>
@@ -29,6 +29,7 @@
               <th class="px-4 py-3 text-left">Tipo</th>
               <th class="px-4 py-3 text-left">Tarefa</th>
               <th class="px-4 py-3 text-left">Usuário</th>
+              <th class="px-4 py-3 text-left">Descrição</th>
               <th class="px-4 py-3 text-left">Data de Criação</th>
               <th class="px-4 py-3 text-left">Opções</th>
             </tr>
@@ -42,6 +43,7 @@
               </td>
               <td class="px-4 py-3 border-t border-gray-200">Tarefa - 1</td>
               <td class="px-4 py-3 border-t border-gray-200">Lucas</td>
+              <td class="px-4 py-3 border-t border-gray-200">Ajuste do SQL - Adicionado no GiHub</td>
               <td class="px-4 py-3 border-t border-gray-200">21/12/2024</td>
               <td class="px-4 py-3 border-t border-gray-200 flex gap-2">
                 <button class="text-sm bg-blue-500 text-white px-3 py-1 rounded shadow hover:bg-blue-600">Editar</button>
@@ -51,12 +53,12 @@
           </tbody>
         </table>
       </div>
-      <div class="mt-2 flex flex-col items-center">
-  <!-- Help text -->
-  <span class="text-sm text-gray-700 dark:text-gray-400">
+      <div class="mt-6 flex flex-col items-center">
+ <!-- Help text -->
+ <span class="text-sm text-gray-700 dark:text-gray-400">
       Showing <span class="font-semibold text-gray-900 dark:text-white">1</span> to <span class="font-semibold text-gray-900 dark:text-white">10</span> of <span class="font-semibold text-gray-900 dark:text-white">100</span> Entries
   </span>
-  <nav class="mt-2" aria-label="Page navigation example">
+  <nav class="mt-4" aria-label="Page navigation example">
   <ul class="flex items-center -space-x-px h-8 text-sm">
     <li>
       <a href="#" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -91,6 +93,7 @@
     </li>
   </ul>
 </nav>
+
 
     </div>
   </section>

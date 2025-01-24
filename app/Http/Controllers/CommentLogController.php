@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class CommentLogController extends Controller
 {
+
+    public function comment () {
+        return view('comment.index');
+    }
+    
     /**
      * Display a listing of the resource.
      */
