@@ -108,8 +108,44 @@ class Teams extends Model
         return DB::select('SELECT * FROM teams WHERE id_teams = ?', [$id]);
     }
 
-    public static function getTeamByResponsibleId($id)
+    public static function filterTeams($filters)
     {
-        return DB::select('SELECT * FROM teams WHERE responsible_id = ?', [$id]);
+        $query = DB::table('teams')
+            ->select(
+                'teams.*',
+                'users.name as responsible_name',
+                DB::raw('COUNT(tasks.id_tasks) as total_tasks')
+            )
+            ->leftJoin('users', 'teams.responsible_id', '=', 'users.id_user')
+            ->leftJoin('tasks', 'tasks.team_id', '=', 'teams.id_teams')
+            ->groupBy('teams.id_teams', 'users.name');
+
+        // Aplicação condicional dos filtros
+        if (!empty($filters['name'])) {
+            $query->where('teams.name', 'like', '%' . $filters['name'] . '%');
+        }
+
+        if (!empty($filters['status'])) {
+            $query->where('teams.status', $filters['status']);
+        }
+
+        if (!empty($filters['start_date'])) {
+            $query->where('teams.start_date', '>=', $filters['start_date']);
+        }
+
+        if (!empty($filters['end_date'])) {
+            $query->where('teams.end_date', '<=', $filters['end_date']);
+        }
+
+        if (!empty($filters['responsible'])) {
+            $query->where('users.name', 'like', '%' . $filters['responsible'] . '%');
+        }
+
+        // Excluir condições desnecessárias que dificultam o retorno inicial
+        // Removendo "having" e "subqueries" até garantirmos que os filtros básicos funcionam
+        $query->orderByDesc(DB::raw('COUNT(tasks.id_tasks)'));
+
+        // Certifique-se de retornar um resultado que funcione com paginate
+        return $query->distinct();
     }
 }

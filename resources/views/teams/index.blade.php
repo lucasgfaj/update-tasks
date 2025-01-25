@@ -10,16 +10,18 @@
         </h1>
         <div>
             <div class="mb-4 flex justify-between">
-                <input
-                    type="text"
-                    id="teamFilter"
-                    placeholder="Filtrar por nome do Time"
-                    class="w-1/2 px-3 py-2 border rounded-lg">
-                <button
-                    id="addTeamBtn"
-                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-                    Adicionar Time
-                </button>
+                    <button
+                        id="addFiltersBtn"
+                        class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 mr-2"
+                        onclick="openFiltersModal()">
+                        Filtros
+                    </button>
+                    <button
+                        id="addTeamBtn"
+                        class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                        Adicionar Time
+                    </button>
+                </div>
             </div>
         </div>
         <div class="overflow-x-auto shadow-lg rounded-lg">
@@ -57,8 +59,8 @@
                         <td class="px-4 py-3 border-t border-gray-200">
                             <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">{{ $team->status }}</span>
                         </td>
-                        <td class="px-4 py-3 border-t border-gray-200">{{ $team->start_date }}</td>
-                        <td class="px-4 py-3 border-t border-gray-200">{{ $team->end_date }}</td>
+                        <td class="px-4 py-3 border-t border-gray-200">{{ \Carbon\Carbon::parse($team->start_date)->format('d/m/Y') }}</td>
+                        <td class="px-4 py-3 border-t border-gray-200">{{ \Carbon\Carbon::parse($team->end_date)->format('d/m/Y') }}</td>
                         <td class="px-4 py-3 border-t border-gray-200 flex gap-2">
                             <button
                                 class="text-sm bg-blue-500 text-white px-3 py-1 rounded shadow hover:bg-blue-600"
@@ -414,13 +416,13 @@
             <!-- Tipo de Time -->
             <div class="mb-4">
                 <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Tipo de Time</label>
-                <span id="type" class="w-full px-3 py-2 border rounded text-gray-700 bg-gray-100">{{ $team->type }}</span>
+                <span id="type" class="w-full px-3 py-2 border rounded text-gray-700 bg-gray-100">{{ $team->type ?? '' }}</span>
             </div>
 
             <!-- Status -->
             <div class="mb-4">
                 <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <span id="status" class="w-full px-3 py-2 border rounded text-gray-700 bg-gray-100">{{ $team->status }}</span>
+                <span id="status" class="w-full px-3 py-2 border rounded text-gray-700 bg-gray-100">{{ $team->status ?? '' }}</span>
             </div>
 
             <!-- Data de Início -->
@@ -449,6 +451,50 @@
                 <button type="button" onclick="closeViewModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Fechar</button>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Modal de filtros (se necessário) -->
+<!-- Modal de filtros (se necessário) -->
+<div id="filters-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden">
+    <div class="bg-white p-6 rounded-lg w-96">
+        <h2 class="text-xl font-semibold mb-4">Filtros</h2>
+
+        <form action="{{ route('teams') }}" method="GET">
+            <!-- Filtro de nome do time -->
+            <label for="teamFilter" class="block text-sm font-medium text-gray-700">Nome do Time</label>
+            <input type="text" id="teamFilter" name="name" value="{{ $filters['name'] ?? '' }}" class="w-full px-3 py-2 border rounded-lg mb-4" placeholder="Filtrar por nome do time">
+
+            <!-- Filtro de status -->
+            <label for="filter-status" class="block text-sm font-medium text-gray-700">Status</label>
+            <select id="filter-status" name="status" class="w-full px-4 py-2 border rounded-lg mb-4">
+                <option value="">Selecione um status</option>
+                <option value="Ativo" {{ (isset($filters['status']) && $filters['status'] == 'Ativo') ? 'selected' : '' }}>Ativo</option>
+                <option value="Inativo" {{ (isset($filters['status']) && $filters['status'] == 'Inativo') ? 'selected' : '' }}>Inativo</option>
+            </select>
+
+            <!-- Filtro de data de início -->
+            <label for="start_date" class="block text-sm font-medium text-gray-700">Data de Início</label>
+            <input type="date" id="start_date" name="start_date" value="{{ $filters['start_date'] ?? '' }}" class="w-full px-3 py-2 border rounded-lg mb-4">
+
+            <!-- Filtro de data de término -->
+            <label for="end_date" class="block text-sm font-medium text-gray-700">Data de Término</label>
+            <input type="date" id="end_date" name="end_date" value="{{ $filters['end_date'] ?? '' }}" class="w-full px-3 py-2 border rounded-lg mb-4">
+
+            <!-- Filtro de responsável -->
+            <label for="responsible" class="block text-sm font-medium text-gray-700">Responsável</label>
+            <input type="text" id="responsible" name="responsible" value="{{ $filters['responsible'] ?? '' }}" class="w-full px-3 py-2 border rounded-lg mb-4" placeholder="Filtrar por responsável">
+
+            <!-- Filtro de tarefas (Exemplo: número mínimo de tarefas) -->
+            <label for="min_tasks" class="block text-sm font-medium text-gray-700">Número Mínimo de Tarefas</label>
+            <input type="number" id="min_tasks" name="min_tasks" value="{{ $filters['min_tasks'] ?? '' }}" class="w-full px-3 py-2 border rounded-lg mb-4" placeholder="Filtrar por número de tarefas">
+
+            <!-- Botões de filtro -->
+            <div class="flex justify-between mt-6">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Aplicar</button>
+                <button type="button" onclick="closeFiltersModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancelar</button>
+            </div>
+        </form>
     </div>
 </div>
 

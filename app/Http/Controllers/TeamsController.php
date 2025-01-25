@@ -13,16 +13,17 @@ class TeamsController extends Controller
      */
     public function teams(Request $request)
     {
-    // Buscar todos os times
-    $page = $request->get('page', 1);
+        $filters = $request->except('page');
 
-    $teams = Teams::paginate(10);
+        // Checar se filtros estão presentes e aplicar a lógica correta
+        if (!empty($filters)) {
+            $teams = Teams::filterTeams($filters)->paginate(10); // Se houver filtros
+        } else {
+            $teams = Teams::paginate(10); // Sem filtros
+        }
 
-    // Recupera todos os usuários usando o método all(), que retorna todos os registros
-    $users = User::getAllUsers(); // Ou User::get()
-
-    // Passar as variáveis $teams e $users para a view
-    return view('teams.index', compact('teams', 'users'));
+        $users = User::getAllUsers();
+        return view('teams.index', compact('teams', 'users', 'filters'));
     }
 
     public function store(Request $request) {

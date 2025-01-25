@@ -69,13 +69,31 @@ function closeDeleteModal() {
 
 // Modal de Visualização
 function openViewModal(id) {
-    // Aqui você pode pegar os dados do time (id) e preencher os campos do modal com AJAX ou outros métodos
-    // Exemplo: Preencher os campos do modal via AJAX
-
-    // Após preencher os campos, exibimos o modal de visualização
+  // Exibe o modal
     document.getElementById("view-modal").classList.remove("hidden");
 }
 
 function closeViewModal() {
+    // Fecha o modal
     document.getElementById("view-modal").classList.add("hidden");
 }
+
+// Modal de Filtros
+function openFiltersModal() {
+    // Exibe o modal
+    document.getElementById("filters-modal").classList.remove("hidden");
+    // Opcional: Focar no primeiro campo de filtro ao abrir
+    document.getElementById("filter-name").focus();
+}
+
+function closeFiltersModal() {
+    // Fecha o modal
+    document.getElementById("filters-modal").classList.add("hidden");
+}
+
+// Fechar o modal ao clicar fora da área do conteúdo (facultativo)
+document.getElementById("filters-modal").addEventListener("click", function(event) {
+    if (event.target === document.getElementById("filters-modal")) {
+        closeFiltersModal();
+    }
+});
