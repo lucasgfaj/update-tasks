@@ -142,14 +142,13 @@
             </nav>
         </div>
 </section>
-
-<!-- Modal para adicionar um novo time -->
 <div
     id="modalAddTeam"
     class="fixed inset-0 hidden bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg shadow-lg p-6 w-1/3 relative">
+    <div
+        class="bg-white rounded-lg shadow-lg p-6 w-full max-w-6xl h-auto relative max-h-[80vh] overflow-y-auto">
         <!-- Título do Modal -->
-        <h2 class="text-lg font-bold text-gray-800">Adicionar Novo Time</h2>
+        <h2 class="text-xl font-bold text-gray-800">Adicionar Novo Time</h2>
 
         <!-- Formulário -->
         <form id="addTeamForm" action="{{ route('teams.store') }}" method="POST" class="mt-4">
@@ -262,11 +261,9 @@
             </div>
         </form>
     </div>
-</div>
-
-<!-- Modal Editar -->
+    </div><!-- Modal Editar -->
 <div id="edit-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden">
-    <div class="bg-white p-6 rounded-lg w-96">
+    <div class="bg-white p-6 rounded-lg w-full sm:w-96 md:w-96 lg:w-[32rem] xl:w-[40rem] max-h-[80vh] overflow-y-auto">
         <h2 class="text-xl font-semibold mb-4">Editar Time</h2>
         <form method="POST" action="{{ route('teams.update', $team->id_teams ?? '') }}">
             @csrf
@@ -288,6 +285,7 @@
                     class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                     required>{{ $team->description ?? '' }}</textarea>
             </div>
+
             <!-- Responsável -->
             <div class="mb-4">
                 <label for="responsible_id" class="block text-sm font-medium text-gray-700">Responsável</label>
@@ -369,8 +367,9 @@
     </div>
 </div>
 
+<!-- Modal Excluir -->
 <div id="delete-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden">
-    <div class="bg-white p-6 rounded-lg w-96">
+    <div class="bg-white p-6 rounded-lg w-full max-w-xl h-auto max-h-screen overflow-y-auto">
         <h2 class="text-xl font-semibold mb-4">Tem certeza de que deseja excluir este time?</h2>
         <form method="POST" id="delete-form" action="" class="flex gap-4 justify-between">
             @csrf
@@ -380,10 +379,9 @@
         </form>
     </div>
 </div>
-
 <!-- Modal de Visualização -->
 <div id="view-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden">
-    <div class="bg-white p-6 rounded-lg w-full max-w-4xl">
+    <div class="bg-white p-6 rounded-lg w-full max-w-5xl max-h-[90vh] overflow-auto">
         <h2 class="text-xl font-semibold mb-4">Visualizar Time</h2>
         <div class="space-y-4">
 
@@ -404,9 +402,9 @@
             </div>
 
             <!-- Responsável -->
-            <div class="mb-4">
-                <label for="responsible_id" class="block text-sm font-medium text-gray-700 mb-2">Responsável</label>
-                <span id="responsible_id" class="w-full px-3 py-2 border rounded text-gray-700 bg-gray-100">
+            <div>
+                <label for="responsible_id" class="block text-sm font-medium text-gray-700">Responsável</label>
+                <span id="responsible_id" class="block w-full px-3 py-2 border rounded text-gray-700 bg-gray-100">
                     @foreach ($users as $user)
                     {{ $user->name }}{{ !$loop->last ? ',' : '' }}
                     @endforeach
@@ -414,15 +412,15 @@
             </div>
 
             <!-- Tipo de Time -->
-            <div class="mb-4">
-                <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Tipo de Time</label>
-                <span id="type" class="w-full px-3 py-2 border rounded text-gray-700 bg-gray-100">{{ $team->type ?? '' }}</span>
+            <div>
+                <label for="type" class="block text-sm font-medium text-gray-700">Tipo de Time</label>
+                <span id="type" class="block w-full px-3 py-2 border rounded text-gray-700 bg-gray-100">{{ $team->type ?? '' }}</span>
             </div>
 
             <!-- Status -->
-            <div class="mb-4">
-                <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <span id="status" class="w-full px-3 py-2 border rounded text-gray-700 bg-gray-100">{{ $team->status ?? '' }}</span>
+            <div>
+                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                <span id="status" class="block w-full px-3 py-2 border rounded text-gray-700 bg-gray-100">{{ $team->status ?? '' }}</span>
             </div>
 
             <!-- Data de Início -->
@@ -447,17 +445,15 @@
                     readonly>
             </div>
 
-            <div class="flex justify-between mt-6">
-                <button type="button" onclick="closeViewModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Fechar</button>
+            <div class="flex justify-end mt-6">
+                <button type="button" onclick="closeViewModal()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">Fechar</button>
             </div>
         </div>
     </div>
 </div>
-
 <!-- Modal de filtros (se necessário) -->
-<!-- Modal de filtros (se necessário) -->
-<div id="filters-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden">
-    <div class="bg-white p-6 rounded-lg w-96">
+<div id="filters-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-end sm:items-center hidden transition-all transform duration-300 ease-in-out">
+    <div class="bg-white p-4 rounded-t-lg sm:rounded-lg w-full sm:w-96 md:w-96 lg:w-[32rem] xl:w-[40rem] max-h-[80vh] overflow-y-auto">
         <h2 class="text-xl font-semibold mb-4">Filtros</h2>
 
         <form action="{{ route('teams') }}" method="GET">
