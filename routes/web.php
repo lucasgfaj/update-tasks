@@ -39,13 +39,16 @@ Route::middleware('auth')->group(function () {
     // Rota para deletar usuário
     Route::delete('/user/delete/{id}', [UserController::class, 'deleteUser'])->name('user.delete');
 
+    // Rota para exibir detalhes do time
+    Route::get('/teams/show/{id}', [TeamsController::class, 'show'])->name('teams.show');
+
     Route::get('/teams/create', [TeamsController::class, 'create'])->name('teams.create');
 
     Route::post('/teams/store', [TeamsController::class, 'store'])->name('teams.store');
 
-    Route::get('/teams/edit/{id}', [TeamsController::class, 'edit'])->name('teams.edit');
+    Route::get('/teams/edit/{id?}', [TeamsController::class, 'edit'])->name('teams.edit');
 
-    Route::put('/teams/update/{id}', [TeamsController::class, 'update'])->name('teams.update');
+    Route::put('/teams/update/{id?}', [TeamsController::class, 'update'])->name('teams.update');
 
     Route::delete('/teams/delete/{id}', [TeamsController::class, 'delete'])->name('teams.delete');
 

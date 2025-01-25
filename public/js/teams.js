@@ -1,9 +1,9 @@
 const modalAddTeam = document.getElementById("modalAddTeam");
-const addTaskBtn = document.getElementById("addTaskBtn");
+const addTeamBtn = document.getElementById("addTeamBtn");
 const closeAddTeamBtn = document.getElementById("closeAddTeamBtn");
 
 // Abrir o modal
-addTaskBtn.addEventListener("click", () => {
+addTeamBtn.addEventListener("click", () => {
     modalAddTeam.classList.remove("hidden"); // Mostra o modal
 });
 
@@ -59,10 +59,23 @@ function confirmDelete(id) {
     document.getElementById('delete-modal').classList.remove('hidden');
 
     // Define a URL da rota de exclusão no formulário
-    document.getElementById('delete-form').action = '/teams/' + id; // Substitua pelo caminho correto para sua rota
+    document.getElementById('delete-form').action = '/teams/delete/' + id; // Substitua pelo caminho correto para sua rota
 }
 
 function closeDeleteModal() {
     // Fecha o modal
     document.getElementById('delete-modal').classList.add('hidden');
+}
+
+// Modal de Visualização
+function openViewModal(id) {
+    // Aqui você pode pegar os dados do time (id) e preencher os campos do modal com AJAX ou outros métodos
+    // Exemplo: Preencher os campos do modal via AJAX
+
+    // Após preencher os campos, exibimos o modal de visualização
+    document.getElementById("view-modal").classList.remove("hidden");
+}
+
+function closeViewModal() {
+    document.getElementById("view-modal").classList.add("hidden");
 }

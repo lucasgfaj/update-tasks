@@ -1,0 +1,9 @@
+@media (max-width: 768px) {
+    #view-modal {
+        width: 90%; /* Ajusta a largura do modal em telas menores */
+    }
+    .view-modal .content {
+        width: 100%;
+        padding: 20px;
+    }
+}

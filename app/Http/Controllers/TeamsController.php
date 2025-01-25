@@ -11,10 +11,12 @@ class TeamsController extends Controller
     /**
      * Rota Team
      */
-    public function teams()
+    public function teams(Request $request)
     {
     // Buscar todos os times
-    $teams = Teams::getAllTeams();
+    $page = $request->get('page', 1);
+
+    $teams = Teams::paginate(10);
 
     // Recupera todos os usuários usando o método all(), que retorna todos os registros
     $users = User::getAllUsers(); // Ou User::get()
@@ -52,17 +54,16 @@ class TeamsController extends Controller
         return redirect()->route('teams')->with('success', 'Time criado com sucesso!');
     }
 
-    public function edit($id) {
-        // Buscar o time pelo ID
-        $team = Teams::getTeamById($id);
+    public function edit($id = null) {
+        if ($id) {
+            $team = Teams::getTeamById($id);
 
-        // Se o time for uma coleção, garantir que é um único time
-        if (!$team || $team->isEmpty()) {
-            // Se não houver time, redireciona com mensagem de erro
-            return redirect()->route('teams.index')->with('error', 'Time não encontrado.');
+            if (!$team) {
+                return redirect()->route('teams.index')->with('error', 'Time não encontrado.');
+            }
+
+            return view('teams.edit', compact('team'));
         }
-
-        // Caso o time tenha sido encontrado, passa ele para a view
         return view('teams.edit', compact('team'));
     }
 
@@ -74,7 +75,7 @@ class TeamsController extends Controller
         return view('teams',  ['team' => $team[0]]);
     }
 
-    public function update (Request $request, $id) {
+    public function update(Request $request, $id = null) {
         // Valida os dados
         $request->validate([
             'name' => 'required|string|max:400',
@@ -86,21 +87,10 @@ class TeamsController extends Controller
             'end_date' => 'required|date',
         ]);
 
-        // Prepara os dados para atualização
-        $data = [
-            'name' => $request->name,
-            'responsible_id' => $request->responsible_id,
-            'type' => $request->type,
-            'description' => $request->description,
-            'status' => $request->status,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-        ];
-
         // Atualiza os dados do time
-        Teams::updateTeam($id, $data);
+        Teams::updateTeam($id, $request->all());
 
-        return redirect()->route('teams', $id)->with('success', 'Time atualizado com sucesso!');
+        return redirect()->route('teams')->with('success', 'Time atualizado com sucesso!');
     }
 
     public function delete($id) {

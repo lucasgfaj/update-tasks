@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+<link rel="stylesheet" href="{{ asset('css/teams.css') }}">
 <section class="mt-10">
     <div class="container mx-auto">
         <h1 class="text-3xl font-extrabold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-fuchsia-500 to-pink-500">
@@ -10,18 +12,18 @@
             <div class="mb-4 flex justify-between">
                 <input
                     type="text"
-                    id="taskFilter"
-                    placeholder="Filtrar por nome da tarefa"
+                    id="teamFilter"
+                    placeholder="Filtrar por nome do Time"
                     class="w-1/2 px-3 py-2 border rounded-lg">
                 <button
-                    id="addTaskBtn"
+                    id="addTeamBtn"
                     class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
                     Adicionar Time
                 </button>
             </div>
         </div>
         <div class="overflow-x-auto shadow-lg rounded-lg">
-            <table id="task" class="display table-auto w-full border-collapse bg-white rounded-lg">
+            <table id="team" class="display table-auto w-full border-collapse bg-white rounded-lg">
                 <!-- Cabeçalho -->
                 <thead>
                     <tr class="bg-gradient-to-r from-blue-400 to-purple-400 text-white text-sm uppercase tracking-wide">
@@ -39,12 +41,16 @@
                 </thead>
                 <!-- Corpo -->
                 <tbody>
-                    @foreach($teams as $team)
-                    <tr class="bg-gray-50 hover:bg-blue-50 transition">
-                        <td class="px-4 py-3 border-t border-gray-200">{{ $team->id_teams }}</td>
+                    @foreach($teams as $index => $team)
+                    <tr class="bg-gray-50 hover:bg-blue-50 transition" onclick="openViewModal({{ $team->id_teams ?? ''}})">
+                        <!-- Exibindo um valor mascarado, aqui usando o índice + 1 -->
+                        <td class="px-4 py-3 border-t border-gray-200">{{ $index + 1 }}</td>
                         <td class="px-4 py-3 border-t border-gray-200">{{ $team->name }}</td>
-                        <!-- <td class="px-4 py-3 border-t border-gray-200">{{ $team->description }}</td> -->
-                        <td class="px-4 py-3 border-t border-gray-200">{{ $team->responsible_id }}</td>
+                        <td class="px-4 py-3 border-t border-gray-200">
+                            @foreach ($users as $user)
+                            {{ $user->name }}{{ !$loop->last ? ',' : '' }}
+                            @endforeach
+                        </td>
                         <td class="px-4 py-3 border-t border-gray-200">
                             <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded">{{ $team->type }}</span>
                         </td>
@@ -53,15 +59,15 @@
                         </td>
                         <td class="px-4 py-3 border-t border-gray-200">{{ $team->start_date }}</td>
                         <td class="px-4 py-3 border-t border-gray-200">{{ $team->end_date }}</td>
-                        <!-- <td class="px-4 py-3 border-t border-gray-200">{{ $team->created_at }}</td> -->
                         <td class="px-4 py-3 border-t border-gray-200 flex gap-2">
                             <button
                                 class="text-sm bg-blue-500 text-white px-3 py-1 rounded shadow hover:bg-blue-600"
-                                onclick="openEditModal({{ $team->id_teams }})">
+                                onclick="openEditModal({{ $team->id_teams ?? '' }}); event.stopPropagation()">
                                 Editar
                             </button>
-                            <button class="text-sm bg-red-500 text-white px-3 py-1 rounded shadow hover:bg-red-600"
-                                onclick="confirmDelete({{ $team->id_teams }})">
+                            <button
+                                class="text-sm bg-red-500 text-white px-3 py-1 rounded shadow hover:bg-red-600"
+                                onclick="confirmDelete({{ $team->id_teams ?? '' }}); event.stopPropagation()">
                                 Excluir
                             </button>
                         </td>
@@ -73,45 +79,65 @@
         <div class="mt-6 flex flex-col items-center">
             <!-- Help text -->
             <span class="text-sm text-gray-700 dark:text-gray-400">
-                Showing <span class="font-semibold text-gray-900 dark:text-white">1</span> to <span class="font-semibold text-gray-900 dark:text-white">10</span> of <span class="font-semibold text-gray-900 dark:text-white">100</span> Entries
+                Mostrando <span class="font-semibold text-gray-900 dark:text-white">{{ $teams->firstItem() }}</span> para
+                <span class="font-semibold text-gray-900 dark:text-white">{{ $teams->lastItem() }}</span> de
+                <span class="font-semibold text-gray-900 dark:text-white">{{ $teams->total() }}</span> Entradas
             </span>
+
             <nav class="mt-4" aria-label="Page navigation example">
                 <ul class="flex items-center -space-x-px h-8 text-sm">
-                    <li>
-                        <a href="#" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                    <!-- Página anterior -->
+                    @if ($teams->onFirstPage())
+                    <li class="disabled">
+                        <a href="#" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-300 bg-white border border-e-0 border-gray-300 rounded-s-lg cursor-not-allowed">
                             <span class="sr-only">Previous</span>
                             <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
                             </svg>
                         </a>
                     </li>
+                    @else
                     <li>
-                        <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-                    </li>
-                    <li>
-                        <a href="#" aria-current="page" class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                            <span class="sr-only">Next</span>
+                        <a href="{{ $teams->previousPageUrl() }}" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Previous</span>
                             <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
                             </svg>
                         </a>
                     </li>
+                    @endif
+
+                    <!-- Páginas numeradas -->
+                    @for ($i = 1; $i <= $teams->lastPage(); $i++)
+                        <li>
+                            <a href="{{ $teams->url($i) }}" class="flex items-center justify-center px-3 h-8 leading-tight {{ $i == $teams->currentPage() ? 'text-white bg-blue-500 border-blue-500' : 'text-gray-500 bg-white border-gray-300' }} hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                {{ $i }}
+                            </a>
+                        </li>
+                        @endfor
+
+                        <!-- Próxima página -->
+                        @if ($teams->hasMorePages())
+                        <li>
+                            <a href="{{ $teams->nextPageUrl() }}" class="flex items-center justify-center px-3 h-8 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                <span class="sr-only">Next</span>
+                                <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                                </svg>
+                            </a>
+                        </li>
+                        @else
+                        <li class="disabled">
+                            <a href="#" class="flex items-center justify-center px-3 h-8 rounded-e-lg text-gray-300 bg-white border-gray-300 cursor-not-allowed">
+                                <span class="sr-only">Next</span>
+                                <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                                </svg>
+                            </a>
+                        </li>
+                        @endif
                 </ul>
             </nav>
-
-
         </div>
 </section>
 
@@ -160,14 +186,14 @@
                     class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                     required>
                     <option value="" disabled selected>Escolha o tipo de time</option>
-                    <option value="desenvolvimento">Desenvolvimento</option>
-                    <option value="infraestrutura">Infraestrutura</option>
-                    <option value="suporte">Suporte</option>
-                    <option value="seguranca">Segurança</option>
-                    <option value="qualidade">Qualidade</option>
-                    <option value="devops">DevOps</option>
-                    <option value="dados">Dados</option>
-                    <option value="produto">Produto</option>
+                    <option value="Desenvolvimento">Desenvolvimento</option>
+                    <option value="Infraestrutura">Infraestrutura</option>
+                    <option value="Suporte">Suporte</option>
+                    <option value="Seguranca">Segurança</option>
+                    <option value="Qualidade">Qualidade</option>
+                    <option value="Dev-Ops">DevOps</option>
+                    <option value="Dados">Dados</option>
+                    <option value="Produto">Produto</option>
                 </select>
             </div>
             <!-- Descrição -->
@@ -237,28 +263,109 @@
 </div>
 
 <!-- Modal Editar -->
-<!-- <div id="edit-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden">
+<div id="edit-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden">
     <div class="bg-white p-6 rounded-lg w-96">
         <h2 class="text-xl font-semibold mb-4">Editar Time</h2>
-        <form method="POST" action="{{ route('teams.update', $team->id_teams) }}">
+        <form method="POST" action="{{ route('teams.update', $team->id_teams ?? '') }}">
             @csrf
             @method('PUT')
+
+            <!-- Nome do Time -->
             <div class="mb-4">
-                <label for="name" class="block text-sm text-gray-700">Nome do Time</label>
-                <input type="text" name="name" id="name" class="w-full p-2 border rounded" value="{{ $team->name }}" required>
+                <label for="name" class="block text-sm font-medium text-gray-700">Nome do Time</label>
+                <input type="text" name="name" id="name" class="w-full p-2 border rounded" value="{{ $team->name ?? '' }}" required>
             </div>
+
+            <!-- Descrição -->
             <div class="mb-4">
-                <label for="description" class="block text-sm text-gray-700">Descrição</label>
-                <input type="text" name="description" id="description" class="w-full p-2 border rounded" value="{{ $team->description }}" required>
-            </div> -->
-         <!--   < Adicione aqui outros campos para editar o time (status, start_date, etc) -->
-           <!-- <div class="flex justify-between">
+                <label for="description" class="block text-sm font-medium text-gray-700">Descrição</label>
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="3"
+                    class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    required>{{ $team->description ?? '' }}</textarea>
+            </div>
+            <!-- Responsável -->
+            <div class="mb-4">
+                <label for="responsible_id" class="block text-sm font-medium text-gray-700">Responsável</label>
+                <select
+                    id="responsible_id"
+                    name="responsible_id"
+                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    required>
+                    <option value="" disabled {{ empty($team->responsible_id) ? 'selected' : '' }}>Escolha um responsável</option>
+                    @foreach ($users as $user)
+                    <option value="{{ $user->id_user }}" {{ ($team->responsible_id ?? '') == $user->id_user ? 'selected' : '' }}>{{ $user->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Tipo de Time -->
+            <div class="mb-4">
+                <label for="type" class="block text-sm font-medium text-gray-700">Tipo de Time</label>
+                <select
+                    id="type"
+                    name="type"
+                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    required>
+                    <option value="" disabled {{ empty($team->type) ? 'selected' : '' }}>Escolha o tipo de time</option>
+                    <option value="Desenvolvimento" {{ ($team->type ?? '') == 'Desenvolvimento' ? 'selected' : '' }}>Desenvolvimento</option>
+                    <option value="Infraestrutura" {{ ($team->type ?? '') == 'Infraestrutura' ? 'selected' : '' }}>Infraestrutura</option>
+                    <option value="Suporte" {{ ($team->type ?? '') == 'Suporte' ? 'selected' : '' }}>Suporte</option>
+                    <option value="Seguranca" {{ ($team->type ?? '') == 'Seguranca' ? 'selected' : '' }}>Segurança</option>
+                    <option value="Qualidade" {{ ($team->type ?? '') == 'Qualidade' ? 'selected' : '' }}>Qualidade</option>
+                    <option value="Dev-Ops" {{ ($team->type ?? '') == 'Dev-Ops' ? 'selected' : '' }}>DevOps</option>
+                    <option value="Dados" {{ ($team->type ?? '') == 'Dados' ? 'selected' : '' }}>Dados</option>
+                    <option value="Produto" {{ ($team->type ?? '') == 'Produto' ? 'selected' : '' }}>Produto</option>
+                </select>
+            </div>
+
+            <!-- Status -->
+            <div class="mb-4">
+                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                <select
+                    id="status"
+                    name="status"
+                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    required>
+                    <option value="Ativo" {{ ($team->status ?? '') == 'Ativo' ? 'selected' : '' }}>Ativo</option>
+                    <option value="Inativo" {{ ($team->status ?? '') == 'Inativo' ? 'selected' : '' }}>Inativo</option>
+                </select>
+            </div>
+
+            <!-- Data de Início -->
+            <div class="mb-4">
+                <label for="start_date" class="block text-sm font-medium text-gray-700">Data de Início</label>
+                <input
+                    type="date"
+                    id="start_date"
+                    name="start_date"
+                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    value="{{ $team->start_date ?? '' }}"
+                    required>
+            </div>
+
+            <!-- Data de Fim -->
+            <div class="mb-4">
+                <label for="end_date" class="block text-sm font-medium text-gray-700">Data de Fim</label>
+                <input
+                    type="date"
+                    id="end_date"
+                    name="end_date"
+                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    value="{{ $team->end_date ?? '' }}"
+                    required>
+            </div>
+
+            <!-- Botões de ação -->
+            <div class="flex justify-between">
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Salvar</button>
                 <button type="button" onclick="closeEditModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancelar</button>
             </div>
         </form>
     </div>
-</div> -->
+</div>
 
 <div id="delete-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden">
     <div class="bg-white p-6 rounded-lg w-96">
@@ -269,6 +376,79 @@
             <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Sim</button>
             <button type="button" onclick="closeDeleteModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Não</button>
         </form>
+    </div>
+</div>
+
+<!-- Modal de Visualização -->
+<div id="view-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden">
+    <div class="bg-white p-6 rounded-lg w-full max-w-4xl">
+        <h2 class="text-xl font-semibold mb-4">Visualizar Time</h2>
+        <div class="space-y-4">
+
+            <!-- Nome do Time -->
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Nome do Time</label>
+                <input type="text" id="name" class="w-full p-2 border rounded text-gray-700 bg-gray-100" value="{{ $team->name ?? '' }}" readonly>
+            </div>
+
+            <!-- Descrição -->
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700">Descrição</label>
+                <textarea
+                    id="description"
+                    class="w-full px-3 py-2 border rounded-lg text-gray-700 bg-gray-100"
+                    rows="3"
+                    readonly>{{ $team->description ?? '' }}</textarea>
+            </div>
+
+            <!-- Responsável -->
+            <div class="mb-4">
+                <label for="responsible_id" class="block text-sm font-medium text-gray-700 mb-2">Responsável</label>
+                <span id="responsible_id" class="w-full px-3 py-2 border rounded text-gray-700 bg-gray-100">
+                    @foreach ($users as $user)
+                    {{ $user->name }}{{ !$loop->last ? ',' : '' }}
+                    @endforeach
+                </span>
+            </div>
+
+            <!-- Tipo de Time -->
+            <div class="mb-4">
+                <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Tipo de Time</label>
+                <span id="type" class="w-full px-3 py-2 border rounded text-gray-700 bg-gray-100">{{ $team->type }}</span>
+            </div>
+
+            <!-- Status -->
+            <div class="mb-4">
+                <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                <span id="status" class="w-full px-3 py-2 border rounded text-gray-700 bg-gray-100">{{ $team->status }}</span>
+            </div>
+
+            <!-- Data de Início -->
+            <div>
+                <label for="start_date" class="block text-sm font-medium text-gray-700">Data de Início</label>
+                <input
+                    type="date"
+                    id="start_date"
+                    class="w-full px-3 py-2 border rounded text-gray-700 bg-gray-100"
+                    value="{{ $team->start_date ?? '' }}"
+                    readonly>
+            </div>
+
+            <!-- Data de Fim -->
+            <div>
+                <label for="end_date" class="block text-sm font-medium text-gray-700">Data de Fim</label>
+                <input
+                    type="date"
+                    id="end_date"
+                    class="w-full px-3 py-2 border rounded text-gray-700 bg-gray-100"
+                    value="{{ $team->end_date ?? '' }}"
+                    readonly>
+            </div>
+
+            <div class="flex justify-between mt-6">
+                <button type="button" onclick="closeViewModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Fechar</button>
+            </div>
+        </div>
     </div>
 </div>
 

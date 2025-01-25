@@ -97,6 +97,7 @@ class Teams extends Model
         );
     }
 
+
     public static function deleteTeam($id)
     {
         return DB::delete('DELETE FROM teams WHERE id_teams = ?', [$id]);
