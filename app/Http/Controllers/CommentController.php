@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class CommentLogController extends Controller
+class CommentController extends Controller
 {
 
     public function comment () {
         return view('comment.index');
     }
-    
+
     /**
      * Display a listing of the resource.
      */

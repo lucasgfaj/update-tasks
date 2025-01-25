@@ -7,7 +7,7 @@
     <title>{{ config('app.name', 'Update-Tasks') }}</title>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-
+    <link href="{{ asset('build/assets/app-DYy13L-S.css') }}" rel="stylesheet">
 
     <!-- CSS Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -45,7 +45,7 @@
                                     @csrf
                                     <button class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700 hover:text-white" aria-current="page">Dashboard</button>
                                 </form>
-                                <form action="{{ route('team') }}" method="GET">
+                                <form action="{{ route('teams') }}" method="GET">
                                     @csrf
                                     <button href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</button>
                                 </form>
@@ -109,7 +109,7 @@
                         @csrf
                         <button class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard</button>
                     </form>
-                    <form action="{{ route('team') }}" method="GET">
+                    <form action="{{ route('teams') }}" method="GET">
                         @csrf
                         <button class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Team</button>
                     </form>
@@ -140,6 +140,7 @@
     </footer>
     <script src="{{ asset('js/task-datatable.js') }}"></script>
     <script src="{{ asset('js/dashboard.js') }}"></script>
+    <script src="{{ asset('build/assets/app-Xaw6OIO1.js') }}" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -151,11 +152,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.js"></script>
+    <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
 </body>
-
-
-
-<!-- jQuery -->
-
 
 </html>

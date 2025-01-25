@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>{{ config('app.name', 'Update-Tasks') }}</title>
+    <link href="{{ asset('build/assets/app-DYy13L-S.css') }}" rel="stylesheet">
 </head>
+
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <form action="{{ route('auth.register') }}" method="POST" class="bg-white p-6 rounded shadow-md w-full max-w-sm">
         @csrf
@@ -13,11 +15,11 @@
 
         <!-- Mensagem de erro geral -->
         @if ($errors->any())
-            <div class="mb-4 text-red-500">
-                @foreach ($errors->all() as $error)
-                    <div>{{ $error }}</div>
-                @endforeach
-            </div>
+        <div class="mb-4 text-red-500">
+            @foreach ($errors->all() as $error)
+            <div>{{ $error }}</div>
+            @endforeach
+        </div>
         @endif
 
         <div class="mb-4">
@@ -48,5 +50,8 @@
             <a href="{{ route('auth.login') }}" class="text-blue-500 hover:underline">Login</a>
         </p>
     </form>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('build/assets/app-Xaw6OIO1.js') }}" defer></script>
 </body>
+
 </html>

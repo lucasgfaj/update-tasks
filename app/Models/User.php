@@ -34,7 +34,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    // Aqui podemos manter se precisar usar esse modelo, mas sem métodos Eloquent
+
     // O acesso direto ao banco é feito via SQL
     // Função para criar um novo usuário com SQL direto
     public static function createUser($data)
