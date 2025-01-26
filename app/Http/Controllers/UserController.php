@@ -103,4 +103,21 @@ class UserController extends Controller
     return redirect()->route('user.edit', $id_user)->with('success', 'Dados atualizados com sucesso!');
 }
 
+    // Exclui um usuário
+    public function destroy($id)
+    {
+        User::deleteUser($id); // Chama o método no modelo
+
+        return redirect()->route('dashboard')->with('success', 'Usuário excluído com sucesso!');
+    }
+
+
+    // Função para buscar todos os usuários
+    public function index()
+    {
+        $users = User::getAllUsers(); // Chama o método no modelo
+
+        return view('user.index', ['users' => $users]); // Passa os usuários para a view
+    }
+
 }
