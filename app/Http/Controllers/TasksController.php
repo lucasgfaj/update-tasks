@@ -14,22 +14,21 @@ class TasksController extends Controller
      * Display a listing of the resource.
      */
 
-    public function dashboard(Request $request)
-    {
-        $filters = $request->except('page');
+     public function dashboard(Request $request)
+     {
+         // Recuperar os filtros da requisição, exceto o campo "page"
+         $filters = $request->except('page');
 
-        $users = User::getAllUsers();
+         // Recuperar as listas necessárias
+         $users = User::getAllUsers();
+         $teams = Teams::getAllTeams();
 
-        // Check if filters are present and apply the correct logic
-        if (!empty($filters)) {
-            $tasks = Tasks::filterTasks($filters)->paginate(10); // If there are filters
-        } else {
-            $tasks = Tasks::paginate(10); // Without filters
-        }
+         // Buscar tarefas com ou sem filtros
+         $tasksQuery = Tasks::filterTasks($filters);
+         $tasks = $tasksQuery->paginate(10);
 
-        $teams = Teams::getAllTeams();
-        return view('dashboard.index', compact('tasks', 'teams', 'filters', 'users'));
-    }
+         return view('dashboard.index', compact('tasks', 'teams', 'filters', 'users'));
+     }
 
     public function store(Request $request)
     {
@@ -89,7 +88,7 @@ class TasksController extends Controller
     public function update(Request $request, $id = null)
     {
         // Validate the data
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:400',
             'team_id' => 'required|integer',
             'description' => 'required|string',
@@ -100,10 +99,11 @@ class TasksController extends Controller
         ]);
 
         // Call the update method in the Task model
-        Tasks::updateTask($id, $request->all());
+        Tasks::updateTask($validatedData, $id);
 
         return redirect()->route('dashboard')->with('success', 'Task updated successfully!');
     }
+
 
     public function destroy($id)
     {

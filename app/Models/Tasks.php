@@ -1,8 +1,10 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class Tasks extends Model
 {
@@ -63,14 +65,14 @@ class Tasks extends Model
     }
 
 
-     // Retorna todas as tarefas
+    // Retorna todas as tarefas
 
-     public static function getAllTasks()
-     {
-         return DB::select('SELECT * FROM tasks ORDER BY start_date DESC');
-     }
+    public static function getAllTasks()
+    {
+        return DB::select('SELECT * FROM tasks ORDER BY start_date DESC');
+    }
 
-     // Retorna uma tarefa específica pelo ID
+    // Retorna uma tarefa específica pelo ID
 
     public static function getTask($id)
     {
@@ -79,12 +81,11 @@ class Tasks extends Model
 
 
     // Atualiza uma tarefa
-
-    public static function updateTask($data)
+    public static function updateTask(array $data, int $id)
     {
         return DB::update(
             'UPDATE tasks SET name = ?, team_id = ?, description = ?, priority = ?, status = ?, start_date = ?, end_date = ?, updated_at = ?
-             WHERE id_tasks = ?',
+            WHERE id_tasks = ?',
             [
                 $data['name'],          // Nome da tarefa
                 $data['team_id'],       // ID do time
@@ -93,17 +94,17 @@ class Tasks extends Model
                 $data['status'],        // Status
                 $data['start_date'],    // Data de início
                 $data['end_date'],      // Data de término
-                $id,                    // ID da tarefa
-                ]
+                now(),                  // Data e hora de atualização
+                $id                     // ID da tarefa
+            ]
         );
     }
+    // Deleta uma tarefa
 
-     // Deleta uma tarefa
-
-     public static function deleteTask($id)
-     {
-         return DB::delete('DELETE FROM tasks WHERE id_tasks = ?', [$id]);
-     }
+    public static function deleteTask($id)
+    {
+        return DB::delete('DELETE FROM tasks WHERE id_tasks = ?', [$id]);
+    }
 
 
     // Retorna todas as tarefas de um time específico
@@ -135,27 +136,40 @@ class Tasks extends Model
             ->leftJoin('teams', 'tasks.team_id', '=', 'teams.id_teams')
             ->leftJoin('users', 'teams.responsible_id', '=', 'users.id_user');
 
-        if (isset($filters['team_id'])) {
-            $query->where('tasks.team_id', $filters['team_id']);
-        }
+        if (!empty($filters)) {
+            // Filtro para o time
+            if (!empty($filters['team_id'])) {
+                $query->where('tasks.team_id', $filters['team_id']);
+            }
 
-        if (isset($filters['status'])) {
-            $query->where('tasks.status', $filters['status']);
-        }
+            // Filtro de status
+            if (!empty($filters['status'])) {
+                $query->where('tasks.status', $filters['status']);
+            }
 
-        if (isset($filters['priority'])) {
-            $query->where('tasks.priority', $filters['priority']);
-        }
+            // Filtro de prioridade
+            if (!empty($filters['priority'])) {
+                $query->where('tasks.priority', $filters['priority']);
+            }
 
-        if (isset($filters['start_date'])) {
-            $query->where('tasks.start_date', '>=', $filters['start_date']);
-        }
+            // Filtro de data de início
+            if (!empty($filters['start_date'])) {
+                $startDate = Carbon::createFromFormat('Y-m-d', $filters['start_date'])->format('Y-m-d'); // Converter para o formato correto
+                $query->whereDate('tasks.start_date', '>=', $startDate);
+            }
 
-        if (isset($filters['end_date'])) {
-            $query->where('tasks.end_date', '<=', $filters['end_date']);
+            // Filtro de data de término
+            if (!empty($filters['end_date'])) {
+                $endDate = Carbon::createFromFormat('Y-m-d', $filters['end_date'])->format('Y-m-d'); // Converter para o formato correto
+                $query->whereDate('tasks.end_date', '<=', $endDate);
+            }
+
+            // Filtro de nome da tarefa
+            if (!empty($filters['name'])) {
+                $query->where('tasks.name', 'LIKE', '%' . $filters['name'] . '%');
+            }
         }
 
         return $query->distinct();
     }
-
 }

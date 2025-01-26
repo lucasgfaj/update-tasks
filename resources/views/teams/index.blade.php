@@ -483,7 +483,7 @@
 
             <!-- Filtro de tarefas (Exemplo: número mínimo de tarefas) -->
             <label for="min_tasks" class="block text-sm font-medium text-gray-700">Número Mínimo de Tarefas</label>
-            <input type="number" id="min_tasks" name="min_tasks" value="{{ $filters['min_tasks'] ?? '' }}" class="w-full px-3 py-2 border rounded-lg mb-4" placeholder="Filtrar por número de tarefas">
+<input type="number" id="min_tasks" name="min_tasks" value="{{ $filters['min_tasks'] ?? '' }}" class="w-full px-3 py-2 border rounded-lg mb-4" placeholder="Filtrar por número de tarefas" min="0" step="1">
 
             <!-- Botões de filtro -->
             <div class="flex justify-between mt-6">

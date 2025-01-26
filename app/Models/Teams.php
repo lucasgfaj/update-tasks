@@ -107,7 +107,6 @@ class Teams extends Model
     {
         return DB::select('SELECT * FROM teams WHERE id_teams = ?', [$id]);
     }
-
     public static function filterTeams($filters)
     {
         $query = DB::table('teams')
@@ -120,7 +119,7 @@ class Teams extends Model
             ->leftJoin('tasks', 'tasks.team_id', '=', 'teams.id_teams')
             ->groupBy('teams.id_teams', 'users.name');
 
-        // Aplicação condicional dos filtros
+        // Filtros existentes
         if (!empty($filters['name'])) {
             $query->where('teams.name', 'like', '%' . $filters['name'] . '%');
         }
@@ -141,11 +140,14 @@ class Teams extends Model
             $query->where('users.name', 'like', '%' . $filters['responsible'] . '%');
         }
 
-        // Excluir condições desnecessárias que dificultam o retorno inicial
-        // Removendo "having" e "subqueries" até garantirmos que os filtros básicos funcionam
+        // Adicionando o filtro para o número mínimo de tarefas
+        if (isset($filters['min_tasks']) && $filters['min_tasks'] !== '') {
+            $query->havingRaw('COUNT(tasks.id_tasks) >= ?', [$filters['min_tasks']]);
+        }
+
+        $query->groupBy('teams.id_teams', 'users.name');
         $query->orderByDesc(DB::raw('COUNT(tasks.id_tasks)'));
 
-        // Certifique-se de retornar um resultado que funcione com paginate
         return $query->distinct();
     }
 }

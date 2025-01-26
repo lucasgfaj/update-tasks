@@ -49,7 +49,7 @@
                                     @csrf
                                     <button href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</button>
                                 </form>
-                                <form action="{{ route('comment') }}" method="GET">
+                                <form action="{{ route('comments') }}" method="GET">
                                     @csrf
                                     <button href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Comments</button>
                                 </form>
@@ -113,7 +113,7 @@
                         @csrf
                         <button class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Team</button>
                     </form>
-                    <form action="#" method="{{ route('comment') }}">
+                    <form action="#" method="{{ route('comments') }}">
                         @csrf
                         <button class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Comments</button>
                     </form>

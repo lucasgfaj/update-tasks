@@ -60,7 +60,7 @@
                 <label for="role" class="block text-sm font-medium text-gray-700">Papel</label>
                 <select name="role" id="role"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    {{ auth()->user()->role !== 'admin' ? 'disabled' : '' }}>
+                    {{ auth()->user()->role !== 'admin' ? 'enabled' : '' }}>
                     <option value="developer" {{ $user->role == 'developer' ? 'selected' : '' }}>Developer</option>
                     <option value="frontend" {{ $user->role == 'frontend' ? 'selected' : '' }}>Frontend Developer</option>
                     <option value="backend" {{ $user->role == 'backend' ? 'selected' : '' }}>Backend Developer</option>

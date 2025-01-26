@@ -11,7 +11,7 @@ use App\Http\Controllers\TasksController;
 Route::get('/', [AuthController::class, 'index'])->name('home');
 
 // Grupo de rotas de autenticação
-Route::prefix('auth')->name('auth.')->group(function() {
+Route::prefix('auth')->name('auth.')->group(function () {
     // Rota para registrar o usuário
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [UserController::class, 'register']);
@@ -70,8 +70,27 @@ Route::middleware('auth')->group(function () {
     // Team
     Route::get('/teams', [TeamsController::class, 'teams'])->name('teams');
 
-    // Comments
-    Route::get('/comments', [CommentController::class, 'comment'])->name('comment');
+    // Rota para exibir todos os comentários
+    Route::get('/comments', [CommentController::class, 'comments'])->name('comments');
+
+    // Rota para criar um novo comentário
+    Route::get('/comments/create', [CommentController::class, 'create'])->name('comments.create');
+
+    // Rota para salvar um comentário
+    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+
+    // Rota para exibir detalhes de um comentário
+    Route::get('/comments/{id}', [CommentController::class, 'show'])->name('comments.show');
+
+    // Rota para editar um comentário
+    Route::get('/comments/{id}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+
+    // Rota para atualizar um comentário
+    Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+
+    // Rota para deletar um comentário
+    Route::delete('/comments/delete/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
 
     // Admin (protegido para admin apenas)
     Route::get('/users', function () {

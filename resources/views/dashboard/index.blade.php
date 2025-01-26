@@ -383,10 +383,12 @@
             <div>
                 <label for="team_id" class="block text-sm font-medium text-gray-700">Time Responsável</label>
                 <span id="team_id" class="block w-full px-3 py-2 border rounded text-gray-700 bg-gray-100">
+                    @foreach ($tasks as $task) <!-- Certifique-se de estar percorrendo as tarefas -->
                     @foreach ($teams as $team)
                     @if ($team->id_teams == $task->team_id)
                     {{ $team->name }}
                     @endif
+                    @endforeach
                     @endforeach
                 </span>
             </div>
@@ -433,54 +435,83 @@
 </div>
 
 <!-- Modal de filtros -->
-<div id="filters-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-end sm:items-center hidden transition-all transform duration-300 ease-in-out">
-    <div class="bg-white p-4 rounded-t-lg sm:rounded-lg w-full sm:w-96 md:w-96 lg:w-[32rem] xl:w-[40rem] max-h-[80vh] overflow-y-auto">
-        <h2 class="text-xl font-semibold mb-4">Filtros</h2>
+<div id="filters-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-end sm:items-center hidden transition-transform duration-300 ease-in-out">
+    <div class="bg-white p-6 rounded-t-lg sm:rounded-lg w-full sm:w-96 md:w-[28rem] lg:w-[32rem] xl:w-[40rem] max-h-[80vh] overflow-y-auto shadow-lg">
+        <h2 class="text-2xl font-semibold mb-6 text-gray-800">Filtros</h2>
 
-        <form action="{{ route('dashboard') }}" method="GET">
-            <!-- Filtro de nome da tarefa -->
-            <label for="taskFilter" class="block text-sm font-medium text-gray-700">Nome da Tarefa</label>
-            <input type="text" id="taskFilter" name="name" value="{{ $filters['name'] ?? '' }}" class="w-full px-3 py-2 border rounded-lg mb-4" placeholder="Filtrar por nome da tarefa">
+        <form action="{{ route('dashboard') }}" method="GET" class="space-y-4">
+            <!-- Filtro por Nome da Tarefa -->
+            <div>
+                <label for="taskFilter" class="block text-sm font-medium text-gray-700 mb-1">Nome da Tarefa</label>
+                <input type="text" id="taskFilter" name="name"
+                    class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                    value="{{ $filters['name'] ?? '' }}" placeholder="Digite o nome da tarefa">
+            </div>
 
-            <!-- Filtro de status -->
-            <label for="filter-status" class="block text-sm font-medium text-gray-700">Status</label>
-            <select id="filter-status" name="status" class="w-full px-4 py-2 border rounded-lg mb-4">
-                <option value="">Selecione um status</option>
-                <option value="Aberta" {{ (isset($filters['status']) && $filters['status'] == 'Aberta') ? 'selected' : '' }}>Aberta</option>
-                <option value="Em Andamento" {{ (isset($filters['status']) && $filters['status'] == 'Em Andamento') ? 'selected' : '' }}>Em Andamento</option>
-                <option value="Finalizada" {{ (isset($filters['status']) && $filters['status'] == 'Finalizada') ? 'selected' : '' }}>Finalizada</option>
-            </select>
+            <!-- Filtro por Status -->
+            <div>
+                <label for="filter-status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <select id="filter-status" name="status"
+                    class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900">
+                    <option value="">Selecione um status</option>
+                    <option value="Aberta" {{ isset($filters['status']) && $filters['status'] == 'Aberta' ? 'selected' : '' }}>Aberta</option>
+                    <option value="Em Andamento" {{ isset($filters['status']) && $filters['status'] == 'Em Andamento' ? 'selected' : '' }}>Em Andamento</option>
+                    <option value="Finalizada" {{ isset($filters['status']) && $filters['status'] == 'Finalizada' ? 'selected' : '' }}>Finalizada</option>
+                </select>
+            </div>
 
-            <!-- Filtro de data de início -->
-            <label for="start_date" class="block text-sm font-medium text-gray-700">Data de Início</label>
-            <input type="date" id="start_date" name="start_date" value="{{ $filters['start_date'] ?? '' }}" class="w-full px-3 py-2 border rounded-lg mb-4">
+            <!-- Filtro por Data de Início -->
+            <div>
+                <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Data de Início</label>
+                <input type="date" id="start_date" name="start_date"
+                    class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                    value="{{ $filters['start_date'] ?? '' }}">
+            </div>
 
-            <!-- Filtro de data de término -->
-            <label for="end_date" class="block text-sm font-medium text-gray-700">Data de Término</label>
-            <input type="date" id="end_date" name="end_date" value="{{ $filters['end_date'] ?? '' }}" class="w-full px-3 py-2 border rounded-lg mb-4">
+            <!-- Filtro por Data de Término -->
+            <div>
+                <label for="end_date" class="block text-sm font-medium text-gray-700 mb-1">Data de Término</label>
+                <input type="date" id="end_date" name="end_date"
+                    class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                    value="{{ $filters['end_date'] ?? '' }}">
+            </div>
 
-            <!-- Filtro de responsável -->
-            <label for="teams" class="block text-sm font-medium text-gray-700">Time Responsável</label>
-            <input type="text" id="teams" name="teams" value="{{ $filters['teams'] ?? '' }}" class="w-full px-3 py-2 border rounded-lg mb-4" placeholder="Filtrar por time responsável">
+            <!-- Filtro por Time Responsável -->
+            <div>
+                <label for="team_id" class="block text-sm font-medium text-gray-700 mb-1">Time Responsável</label>
+                <select id="team_id" name="team_id" class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900">
+                    <option value="">Selecione um Time</option> <!-- Opcional: caso não selecione nenhum time -->
+                    @foreach ($teams as $team)
+                    <option value="{{ $team->id_teams }}" {{ (isset($filters['team_id']) && $filters['team_id'] == $team->id_teams) ? 'selected' : '' }}>
+                        {{ $team->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
 
-            <!-- Filtro de tipo de tarefa -->
-            <label for="priority" class="block text-sm font-medium text-gray-700">Tipo de Tarefa</label>
-            <select id="priority" name="type" class="w-full px-4 py-2 border rounded-lg mb-4">
-                <option value="">Selecione um tipo</option>
-                <option value="Baixa" {{ (isset($filters['priority']) && $filters['priority'] == 'Baixa') ? 'selected' : '' }}>Baixa</option>
-                <option value="Média" {{ (isset($filters['priority']) && $filters['priority'] == 'Média') ? 'selected' : '' }}>Média</option>
-                <option value="Alta" {{ (isset($filters['priority']) && $filters['priority'] == 'Alta') ? 'selected' : '' }}>Alta</option>
-                <option value="Grave" {{ (isset($filters['priority']) && $filters['priority'] == 'Grave') ? 'selected' : '' }}>Grave</option>
-            </select>
+
+            <!-- Filtro por Tipo de Tarefa -->
+            <div>
+                <label for="priority" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Tarefa</label>
+                <select id="priority" name="priority"
+                    class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900">
+                    <option value="">Selecione um tipo</option>
+                    <option value="Baixa" {{ isset($filters['priority']) && $filters['priority'] == 'Baixa' ? 'selected' : '' }}>Baixa</option>
+                    <option value="Média" {{ isset($filters['priority']) && $filters['priority'] == 'Média' ? 'selected' : '' }}>Média</option>
+                    <option value="Alta" {{ isset($filters['priority']) && $filters['priority'] == 'Alta' ? 'selected' : '' }}>Alta</option>
+                    <option value="Grave" {{ isset($filters['priority']) && $filters['priority'] == 'Grave' ? 'selected' : '' }}>Grave</option>
+                </select>
+            </div>
 
             <!-- Botões de filtro -->
-            <div class="flex justify-between mt-6">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Aplicar</button>
-                <button type="button" onclick="closeFiltersModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancelar</button>
+            <div class="flex justify-between items-center pt-4">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg font-medium transition">Aplicar</button>
+                <button type="button" onclick="closeFiltersModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg font-medium transition">Cancelar</button>
             </div>
         </form>
     </div>
 </div>
+
 
 <script src="{{ asset('js/tasks.js') }}"></script>
 
