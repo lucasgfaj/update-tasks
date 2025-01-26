@@ -103,12 +103,4 @@ class UserController extends Controller
     return redirect()->route('user.edit', $id_user)->with('success', 'Dados atualizados com sucesso!');
 }
 
-    public function dashboard()
-    {
-        // Buscar todos os usuários
-        $users = User::getAllUsers();
-
-        // Passar a variável $users para a view
-        return view('dashboard.index', compact('users'));
-    }
 }

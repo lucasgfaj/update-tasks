@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\TeamsController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TasksController;
 
 // Página inicial - Login
 Route::get('/', [AuthController::class, 'index'])->name('home');
@@ -26,7 +27,21 @@ Route::prefix('auth')->name('auth.')->group(function() {
 // Rotas protegidas para usuários autenticados
 Route::middleware('auth')->group(function () {
     // Dashboard
-    Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [TasksController::class, 'dashboard'])->name('dashboard');
+
+    // Rota para criar uma nova tarefa
+    Route::get('/tasks/create', [TasksController::class, 'create'])->name('tasks.create');
+    Route::post('/tasks', [TasksController::class, 'store'])->name('tasks.store');
+
+    // Rota para exibir detalhes de uma tarefa
+    Route::get('/tasks/{id}', [TasksController::class, 'show'])->name('tasks.show');
+
+    // Rota para editar uma tarefa
+    Route::get('/tasks/{id}/edit', [TasksController::class, 'edit'])->name('tasks.edit');
+    Route::put('/tasks/{id}', [TasksController::class, 'update'])->name('tasks.update');
+
+    // Rota para deletar uma tarefa
+    Route::delete('/tasks/delete/{id}', [TasksController::class, 'destroy'])->name('tasks.destroy');
 
     // Rota para listar usuários
     Route::get('/users', [UserController::class, 'index'])->name('users');
