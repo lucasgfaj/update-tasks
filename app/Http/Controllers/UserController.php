@@ -117,7 +117,7 @@ class UserController extends Controller
     {
         $users = User::getAllUsers(); // Chama o método no modelo
 
-        return view('user.index', ['users' => $users]); // Passa os usuários para a view
+        return view('user.index', compact('users')); // Passa os usuários para a view
     }
 
 }
