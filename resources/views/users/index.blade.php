@@ -40,7 +40,7 @@
             <!-- Corpo -->
             <tbody>
                 @foreach($users as $index => $user)
-                <tr class="bg-gray-50 hover:bg-blue-50 transition" onclick="openViewUserModal({{ $user->id ?? ''}})">
+                <tr class="bg-gray-50 hover:bg-blue-50 transition" onclick="openViewUserModal({{ $user->id_user ?? ''}})">
                     <td class="px-4 py-3 border-t border-gray-200">{{ $index + 1 }}</td>
                     <td class="px-4 py-3 border-t border-gray-200">{{ $user->name }}</td>
                     <td class="px-4 py-3 border-t border-gray-200">{{ $user->email }}</td>
@@ -50,12 +50,12 @@
                     <td class="px-4 py-3 border-t border-gray-200 flex gap-2">
                         <button
                             class="text-sm bg-blue-500 text-white px-3 py-1 rounded shadow hover:bg-blue-600"
-                            onclick="openEditUserModal({{ $user->id ?? '' }}); event.stopPropagation()">
+                            onclick="openEditUserModal({{ $user->id_user ?? '' }}); event.stopPropagation()">
                             Editar
                         </button>
                         <button
                             class="text-sm bg-red-500 text-white px-3 py-1 rounded shadow hover:bg-red-600"
-                            onclick="confirmDeleteUser({{ $user->id ?? '' }}); event.stopPropagation()">
+                            onclick="confirmDeleteUser({{ $user->id_user ?? '' }}); event.stopPropagation()">
                             Excluir
                         </button>
                     </td>
@@ -213,7 +213,7 @@
             </div>
 
             <!-- Botões -->
-            <div class="flex justify-end mt-6 gap-3">
+            <div cla ss="flex justify-end mt-6 gap-3">
                 <button
                     id="closeAddUserBtn"
                     type="button"
@@ -237,7 +237,7 @@
         <h2 class="text-xl font-bold text-gray-800">Editar Usuário</h2>
 
         <!-- Formulário -->
-        <form id="editUserForm" action="{{ route('users.update', $user->id ?? '') }}" method="POST" class="mt-4">
+        <form id="editUserForm" action="{{ route('users.update', $user->id_user ?? '') }}" method="POST" class="mt-4">
             @csrf
             @method('PUT')
             <!-- Nome do Usuário -->
@@ -288,21 +288,17 @@
             <div class="mb-4">
                 <label for="role" class="block text-sm font-medium text-gray-700">Papel</label>
                 <select name="role" id="role"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    {{ auth()->user()->role !== 'Admin' ? 'disabled' : '' }}>
-                    <option value="Developer" {{ $user->role == 'Developer' ? 'selected' : '' }}>Developer</option>
-                    <option value="Frontend" {{ $user->role == 'Frontend' ? 'selected' : '' }}>Frontend Developer</option>
-                    <option value="Backend" {{ $user->role == 'Backend' ? 'selected' : '' }}>Backend Developer</option>
-                    <option value="Fullstack" {{ $user->role == 'Fullstack' ? 'selected' : '' }}>Fullstack Developer</option>
-                    <option value="Mobile" {{ $user->role == 'Mobile' ? 'selected' : '' }}>Mobile Developer</option>
-                    <option value="DevOps" {{ $user->role == 'DevOps' ? 'selected' : '' }}>DevOps</option>
-                    <option value="Designer" {{ $user->role == 'Designer' ? 'selected' : '' }}>Designer</option>
-                    <option value="QA" {{ $user->role == 'QA' ? 'selected' : '' }}>QA Engineer</option>
-                    <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Administrador</option>
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="Developer" {{ isset($user->role) && $user->role == 'Developer' ? 'selected' : '' }}>Developer</option>
+                    <option value="Frontend" {{ isset($user->role) && $user->role == 'Frontend' ? 'selected' : '' }}>Frontend Developer</option>
+                    <option value="Backend" {{ isset($user->role) && $user->role == 'Backend' ? 'selected' : '' }}>Backend Developer</option>
+                    <option value="Fullstack" {{ isset($user->role) && $user->role == 'Fullstack' ? 'selected' : '' }}>Fullstack Developer</option>
+                    <option value="Mobile" {{ isset($user->role) && $user->role == 'Mobile' ? 'selected' : '' }}>Mobile Developer</option>
+                    <option value="DevOps" {{ isset($user->role) && $user->role == 'DevOps' ? 'selected' : '' }}>DevOps</option>
+                    <option value="Designer" {{ isset($user->role) && $user->role == 'Designer' ? 'selected' : '' }}>Designer</option>
+                    <option value="QA" {{ isset($user->role) && $user->role == 'QA' ? 'selected' : '' }}>QA Engineer</option>
+                    <option value="Admin" {{ isset($user->role) && $user->role == 'Admin' ? 'selected' : '' }}>Administrador</option>
                 </select>
-                @if(auth()->user()->role !== 'Admin')
-                <small class="text-gray-500">Somente um administrador pode alterar este campo.</small>
-                @endif
             </div>
 
             <!-- Experiência -->
@@ -310,11 +306,12 @@
                 <label for="experience" class="block text-sm font-medium text-gray-700">Experiência</label>
                 <select name="experience" id="experience"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <option value="Junior" {{ $user->experience == 'Junior' ? 'selected' : '' }}>Júnior</option>
-                    <option value="Pleno" {{ $user->experience == 'Pleno' ? 'selected' : '' }}>Pleno</option>
-                    <option value="Senior" {{ $user->experience == 'Senior' ? 'selected' : '' }}>Sênior</option>
+                    <option value="Junior" {{ isset($user->experience) && $user->experience == 'Junior' ? 'selected' : '' }}>Júnior</option>
+                    <option value="Pleno" {{ isset($user->experience) && $user->experience == 'Pleno' ? 'selected' : '' }}>Pleno</option>
+                    <option value="Senior" {{ isset($user->experience) && $user->experience == 'Senior' ? 'selected' : '' }}>Sênior</option>
                 </select>
             </div>
+
 
             <!-- Botões -->
             <div class="flex justify-end mt-6 gap-3">
@@ -387,7 +384,8 @@
                     type="text"
                     id="view_created_at"
                     class="w-full px-3 py-2 border rounded-lg text-gray-700 bg-gray-100"
-                    value="{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') }}"
+                    value="{{ isset($user) && $user->created_at ? \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') : '' }}"
+
                     readonly>
             </div>
             <div>
@@ -445,9 +443,7 @@
             <!-- Filtro por Data de Criação -->
             <div>
                 <label for="created_at" class="block text-sm font-medium text-gray-700 mb-1">Data de Criação</label>
-                <input type="date" id="created_at" name="created_at"
-                    class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                    value="{{ $filters['created_at'] ?? '' }}">
+                <input type="date" id="created_at" name="created_at" value="{{ $filters['created_at'] ?? '' }}" class="w-full px-3 py-2 border rounded-lg mb-4">
             </div>
 
             <!-- Botões de filtro -->

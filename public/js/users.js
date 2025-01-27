@@ -27,7 +27,7 @@ const closeDeleteUserBtn = document.getElementById("closeDeleteUserBtn");
 
 function confirmDeleteUser(id) {
     deleteUserModal.classList.remove("hidden");
-    document.getElementById('deleteUserForm').action = '/users/delete/' + id;
+    document.getElementById('deleteUserForm').action = '/users/' + id;
 }
 
 closeDeleteUserBtn.addEventListener("click", () => {

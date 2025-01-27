@@ -28,8 +28,8 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password), // Criptografa a senha
-            'role' => '',
-            'experience' => 'Junior',
+            'role' => $request->role, // ou algum valor predefinido
+            'experience' => $request->experience,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
@@ -88,8 +88,8 @@ class UserController extends Controller
     $data = [
         'name' => $request->name,
         'email' => $request->email,
-        'role' => '', // ou algum valor predefinido
-        'experience' => 'Junior', // ou algum valor predefinido
+        'role' => $request->role, // ou algum valor predefinido
+        'experience' => $request->experience, // ou algum valor predefinido
     ];
 
     // Se a senha for fornecida, inclui no array
@@ -108,13 +108,13 @@ class UserController extends Controller
     {
         User::deleteUser($id); // Chama o método no modelo
 
-        return redirect()->route('dashboard')->with('success', 'Usuário excluído com sucesso!');
+        return redirect()->route('users.index')->with('success', 'Usuário excluído com sucesso!');
     }
 
 
     public function index(Request $request)
     {
-
+        // Obtém os filtros da requisição, exceto o parâmetro de página
         $filters = $request->except('page');
 
         // Verifica se o usuário está autenticado e possui permissão
@@ -122,12 +122,24 @@ class UserController extends Controller
             abort(403, 'Acesso negado.');
         }
 
+        // Aplica os filtros na query
         $usersQuery = User::filterUsers($filters);
-        $users = $usersQuery->paginate(10);
+
+        // Realiza a paginação, mantendo os filtros na URL
+        $users = $usersQuery->paginate(10)->appends($filters);
 
         // Retorna a view com os dados
         return view('users.index', compact('users', 'filters'));
     }
+
+    public function editusers($id)
+{
+    // Busca o usuário pelo ID
+    $user = User::findOrFail($id);
+
+    // Retorna a view com o usuário
+    return view('users.edit', compact('user'));
+}
 
     public function store(Request $request){
 
@@ -148,8 +160,8 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password), // Criptografa a senha
-            'role' => '',
-            'experience' => 'Junior',
+            'role' => $request->role,
+            'experience' => $request->experience,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
@@ -158,6 +170,35 @@ class UserController extends Controller
 
         return redirect()->route('users.index')->with('success', 'Usuário criado com sucesso!');
     }
+
+      // Atualiza os dados do usuário
+      public function updateUsers(Request $request, $id_user)
+      {
+          // Valida os dados
+          $request->validate([
+              'name' => 'required|string|max:400',
+              'email' => 'required|string|email|max:400|unique:users,email,' . $id_user . ',id_user', // Corrigido para 'email,' . $id_user
+              'password' => 'nullable|string|min:6|confirmed',
+          ]);
+
+          // Prepara os dados para atualização
+          $data = [
+              'name' => $request->name,
+              'email' => $request->email,
+              'role' => $request->role, // ou algum valor predefinido
+              'experience' => $request->experience, // ou algum valor predefinido
+          ];
+
+          // Se a senha for fornecida, inclui no array
+          if ($request->filled('password')) {
+              $data['password'] = bcrypt($request->password);
+          }
+
+          // Atualiza os dados do usuário
+          User::updateUser($id_user, $data);
+
+          return redirect()->route('users.index', $id_user)->with('success', 'Dados atualizados com sucesso!');
+      }
 
 
 

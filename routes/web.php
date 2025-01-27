@@ -50,9 +50,6 @@ Route::middleware('auth')->group(function () {
     // Rota para atualizar os dados do usuário
     Route::put('/user/update/{id}', [UserController::class, 'update'])->name('user.update');
 
-    // Rota para deletar usuário
-    Route::delete('/user/delete/{id}', [UserController::class, 'deleteUser'])->name('user.delete');
-
     // Rota para exibir detalhes do time
     Route::get('/teams/show/{id}', [TeamsController::class, 'show'])->name('teams.show');
 
@@ -92,16 +89,14 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
-    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
-
-    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::get('/users/{id}', [UserController::class, 'view'])->name('users.view');
 
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
 
-    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
-
+    Route::put('/users/{id}', [UserController::class, 'updateUsers'])->name('users.update');
+//
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
 });
