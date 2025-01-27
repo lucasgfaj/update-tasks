@@ -53,7 +53,7 @@
                                     @csrf
                                     <button href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Comments</button>
                                 </form>
-                                @if(auth()->user()->role === 'admin')
+                                @if(auth()->user()->role === 'Admin')
                                 <form action="{{ route('users.index')}}" method="GET">
                                     @csrf
                                     <button href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
@@ -117,7 +117,7 @@
                         @csrf
                         <button class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Comments</button>
                     </form>
-                    @if(auth()->user()->role === 'admin')
+                    @if(auth()->user()->role === 'Admin')
                     <form action="#" method="">
                         @csrf
                         <button class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Users</button>

@@ -101,4 +101,57 @@ class User extends Authenticatable
         // Exclui um usuário com SQL direto
         return DB::delete('DELETE FROM users WHERE id_user = ?', [$id]);
     }
+
+    public static function filterUsers($filters)
+{
+    $query = DB::table('users')
+        ->select(
+            'users.id_user',
+            'users.name',
+            'users.email',
+            'users.role',
+            'users.experience',
+            'users.created_at'
+        );
+
+    if (!empty($filters)) {
+        // Filtro por nome
+        if (!empty($filters['name'])) {
+            $query->where('users.name', 'LIKE', '%' . $filters['name'] . '%');
+        }
+
+        // Filtro por email
+        if (!empty($filters['email'])) {
+            $query->where('users.email', 'LIKE', '%' . $filters['email'] . '%');
+        }
+
+        // Filtro por função (role)
+        if (!empty($filters['role'])) {
+            $query->where('users.role', $filters['role']);
+        }
+
+        // Filtro por experiência (range de experiência)
+        if (!empty($filters['min_experience'])) {
+            $query->where('users.experience', '>=', $filters['min_experience']);
+        }
+
+        if (!empty($filters['max_experience'])) {
+            $query->where('users.experience', '<=', $filters['max_experience']);
+        }
+
+        // Filtro por data de criação (início e término)
+        if (!empty($filters['created_start_date'])) {
+            $startDate = \Carbon\Carbon::createFromFormat('Y-m-d', $filters['created_start_date'])->format('Y-m-d');
+            $query->whereDate('users.created_at', '>=', $startDate);
+        }
+
+        if (!empty($filters['created_end_date'])) {
+            $endDate = \Carbon\Carbon::createFromFormat('Y-m-d', $filters['created_end_date'])->format('Y-m-d');
+            $query->whereDate('users.created_at', '<=', $endDate);
+        }
+    }
+
+    return $query;
+}
+
 }

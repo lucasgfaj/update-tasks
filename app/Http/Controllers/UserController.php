@@ -112,12 +112,54 @@ class UserController extends Controller
     }
 
 
-    // Função para buscar todos os usuários
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::getAllUsers(); // Chama o método no modelo
 
-        return view('user.index', compact('users')); // Passa os usuários para a view
+        $filters = $request->except('page');
+
+        // Verifica se o usuário está autenticado e possui permissão
+        if (!Auth::check() || auth()->user()->role !== 'Admin') {
+            abort(403, 'Acesso negado.');
+        }
+
+        $usersQuery = User::filterUsers($filters);
+        $users = $usersQuery->paginate(10);
+
+        // Retorna a view com os dados
+        return view('users.index', compact('users', 'filters'));
     }
+
+    public function store(Request $request){
+
+        if (!Auth::check() || auth()->user()->role !== 'Admin') {
+            return response()->json(['error' => 'Acesso negado. Apenas administradores podem realizar esta ação.'], 403);
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:400',
+            'email' => 'required|string|email|max:400|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ], [
+            'email.unique' => 'O e-mail informado já está em uso.',
+            'password.confirmed' => 'As senhas não coincidem.',
+        ]);
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password), // Criptografa a senha
+            'role' => '',
+            'experience' => 'Junior',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ];
+
+        User::create($data);
+
+        return redirect()->route('users.index')->with('success', 'Usuário criado com sucesso!');
+    }
+
+
+
 
 }

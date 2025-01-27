@@ -6,6 +6,7 @@ use App\Http\Controllers\TeamsController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TasksController;
+use App\Models\User;
 
 // Página inicial - Login
 Route::get('/', [AuthController::class, 'index'])->name('home');
@@ -43,8 +44,6 @@ Route::middleware('auth')->group(function () {
     // Rota para deletar uma tarefa
     Route::delete('/tasks/delete/{id}', [TasksController::class, 'destroy'])->name('tasks.destroy');
 
-    // Rota para listar usuários
-    Route::get('/users', [UserController::class, 'index'])->name('users');
     // Rota para editar usuário
     Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
 
@@ -91,12 +90,18 @@ Route::middleware('auth')->group(function () {
     // Rota para deletar um comentário
     Route::delete('/comments/delete/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
-    // Admin (protegido para admin apenas)
-    Route::get('/users', function () {
-        if (!auth()->check() || auth()->user()->role !== 'admin') {
-            abort(403, 'Acesso negado.');
-        }
-        return view('users.index');
-    })->name('users.index');
+    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
 });

@@ -60,18 +60,18 @@
                 <label for="role" class="block text-sm font-medium text-gray-700">Papel</label>
                 <select name="role" id="role"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    {{ auth()->user()->role !== 'admin' ? 'enabled' : '' }}>
-                    <option value="developer" {{ $user->role == 'developer' ? 'selected' : '' }}>Developer</option>
-                    <option value="frontend" {{ $user->role == 'frontend' ? 'selected' : '' }}>Frontend Developer</option>
-                    <option value="backend" {{ $user->role == 'backend' ? 'selected' : '' }}>Backend Developer</option>
-                    <option value="fullstack" {{ $user->role == 'fullstack' ? 'selected' : '' }}>Fullstack Developer</option>
-                    <option value="mobile" {{ $user->role == 'mobile' ? 'selected' : '' }}>Mobile Developer</option>
-                    <option value="devOps" {{ $user->role == 'devOps' ? 'selected' : '' }}>DevOps</option>
-                    <option value="designer" {{ $user->role == 'designer' ? 'selected' : '' }}>Designer</option>
-                    <option value="qa" {{ $user->role == 'qa' ? 'selected' : '' }}>QA Engineer</option>
-                    <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Administrador</option>
+                    {{ auth()->user()->role !== 'Admin' ? 'disabled' : '' }}>
+                    <option value="Developer" {{ $user->role == 'Developer' ? 'selected' : '' }}>Developer</option>
+                    <option value="Frontend" {{ $user->role == 'Frontend' ? 'selected' : '' }}>Frontend Developer</option>
+                    <option value="Backend" {{ $user->role == 'Backend' ? 'selected' : '' }}>Backend Developer</option>
+                    <option value="Fullstack" {{ $user->role == 'Fullstack' ? 'selected' : '' }}>Fullstack Developer</option>
+                    <option value="Mobile" {{ $user->role == 'Mobile' ? 'selected' : '' }}>Mobile Developer</option>
+                    <option value="DevOps" {{ $user->role == 'DevOps' ? 'selected' : '' }}>DevOps</option>
+                    <option value="Designer" {{ $user->role == 'Designer' ? 'selected' : '' }}>Designer</option>
+                    <option value="QA" {{ $user->role == 'QA' ? 'selected' : '' }}>QA Engineer</option>
+                    <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Administrador</option>
                 </select>
-                @if(auth()->user()->role !== 'admin')
+                @if(auth()->user()->role !== 'Admin')
                 <small class="text-gray-500">Somente um administrador pode alterar este campo.</small>
                 @endif
             </div>
@@ -81,9 +81,9 @@
                 <label for="experience" class="block text-sm font-medium text-gray-700">Experiência</label>
                 <select name="experience" id="experience"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <option value="junior" {{ $user->experience == 'junior' ? 'selected' : '' }}>Júnior</option>
-                    <option value="pleno" {{ $user->experience == 'pleno' ? 'selected' : '' }}>Pleno</option>
-                    <option value="senior" {{ $user->experience == 'senior' ? 'selected' : '' }}>Sênior</option>
+                    <option value="Junior" {{ $user->experience == 'Junior' ? 'selected' : '' }}>Júnior</option>
+                    <option value="Pleno" {{ $user->experience == 'Pleno' ? 'selected' : '' }}>Pleno</option>
+                    <option value="Senior" {{ $user->experience == 'Senior' ? 'selected' : '' }}>Sênior</option>
                 </select>
             </div>
 
