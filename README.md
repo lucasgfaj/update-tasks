@@ -1,6 +1,10 @@
 # Update Tasks
 
-Este guia descreve as etapas necessárias para configurar e atualizar o projeto Laravel.
+Este guia descreve as etapas necessárias para configurar e atualizar o projeto Laravel - Update Tasks.
+
+Banco de Dados do Projeto:
+
+[Update Tasks no Notion](https://weak-airedale-459.notion.site/UpdateTasks-16079011507780a3948fea67621a0acb)
 
 ---
 
